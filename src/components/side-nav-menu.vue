@@ -14,7 +14,7 @@ import { sizes } from '@/utils/media-query';
 import navigation from '../app-navigation';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
+import store from '@/store'
 export default {
   props: {
     compactMode: Boolean
@@ -22,7 +22,9 @@ export default {
   setup(props, context) {
     const route = useRoute();
     const router = useRouter();
-
+    console.log(route);
+    console.log(store.getters.routes);
+    console.log(router);
     const isLargeScreen = sizes()['screen-large'];
     const items = navigation.map((item) => {
       if (item.path && !(/^\//.test(item.path))) {
@@ -38,6 +40,7 @@ export default {
     }
 
     function handleItemClick(e) {
+      console.log(e.itemData.path);
       if (!e.itemData.path || props.compactMode) {
         return;
       }

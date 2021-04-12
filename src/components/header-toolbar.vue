@@ -31,8 +31,8 @@
 <script>
 import DxButton from "devextreme-vue/button";
 import DxToolbar, { DxItem } from "devextreme-vue/toolbar";
-import auth from "@/utils/auth";
 import { useRouter, useRoute } from 'vue-router';
+import { useStore } from 'vuex'
 import { ref } from 'vue';
 
 import UserPanel from "./user-panel";
@@ -47,10 +47,10 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-
+    const store = useStore();
+    console.log(store);
     const email = ref("");
-    auth.getUser().then((e) => email.value = e.data.email);
-
+    email.value = store.getters.email;
     const userMenuItems = [{
       text: "Profile",
       icon: "user",
@@ -63,11 +63,16 @@ export default {
     }];
 
     function onLogoutClick() {
-      auth.logOut();
-      router.push({
-        path: "/login-form",
-        query: { redirect: route.path }
-      });
+      store.dispatch("user/logout")
+        .then((res) => {
+          console.log(res);
+          router.push({
+            path: "/login",
+            query: { redirect: route.path }
+          });
+        }).catch((error) => {
+          console.log(error);
+        })
     }
 
     function onProfileClick() {

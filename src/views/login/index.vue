@@ -52,21 +52,20 @@ import DxForm, {
   DxButtonItem,
   DxButtonOptions
 } from "devextreme-vue/form";
-import notify from 'devextreme/ui/notify';
-
-import auth from "@/utils/auth";
+// import auth from "@/utils/auth";
 
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
+import { useStore } from "vuex"
 export default {
   setup() {
+    const store = useStore();
     const route = useRoute();
     const router = useRouter();
-
     const formData = reactive({
-      email: "",
-      password: ""
+      email: "11@qq.com",
+      password: "11",
+      rememberMe: true
     });
     const loading = ref(false);
 
@@ -75,15 +74,22 @@ export default {
     }
 
     async function onSubmit() {
-      const { email, password } = formData;
+      // const { email, password } = formData;
       loading.value = true;
-      const result = await auth.logIn(email, password);
-      if (!result.isOk) {
-        loading.value = false;
-        notify(result.message, "error", 2000);
-      } else {
-        router.push(route.query.redirect || "/home");
-      }
+      // const result = await auth.logIn(email, password);
+      // if (!result.isOk) {
+      //   loading.value = false;
+      //   notify(result.message, "error", 2000);
+      // } else {
+      //   router.push(route.query.redirect || "/home");
+      // }
+      await store.dispatch("user/login", formData)
+        .then(() => {
+          router.push(route.query.redirect || "/home");
+        }).catch((error) => {
+          console.log(error);
+          loading.value = false;
+        })
     }
 
     return {
@@ -107,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../themes/generated/variables.base.scss';
+@import '@/themes/generated/variables.base.scss';
 
 .login-form {
   .link {

@@ -1,15 +1,18 @@
 <template>
   <div id="root">
     <div :class="cssClasses">
-      <component
-        :is="$route.meta.layout"
-        :title="title"
-        :is-x-small="screen.getScreenSizeInfo.isXSmall"
-        :is-large="screen.getScreenSizeInfo.isLarge"
-      >
-      <div class="content">
-        <router-view></router-view>
-      </div>
+      <component :is="$route.meta.layout" :title="title" :is-x-small="screen.getScreenSizeInfo.isXSmall"
+        :is-large="screen.getScreenSizeInfo.isLarge">
+        <div class="content">
+          <!-- <router-view></router-view> -->
+          <router-view v-slot="{ Component }">
+            <transition>
+              <keep-alive>
+                <component :is="Component" />
+              </keep-alive>
+            </transition>
+          </router-view>
+        </div>
         <template #footer>
           <app-footer />
         </template>
@@ -49,8 +52,8 @@ export default {
     const title = vm.proxy.$appInfo.title;
     const screen = reactive({ getScreenSizeInfo: {} });
     screen.getScreenSizeInfo = getScreenSizeInfo();
-    
-    function screenSizeChanged () {
+
+    function screenSizeChanged() {
       screen.getScreenSizeInfo = getScreenSizeInfo();
     }
 
@@ -92,7 +95,7 @@ body {
 }
 
 .app {
-  @import "./themes/generated/variables.base.scss";
+  @import './themes/generated/variables.base.scss';
   background-color: darken($base-bg, 5);
   display: flex;
   height: 100%;

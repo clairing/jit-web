@@ -12,10 +12,10 @@ export default [
         text: "Profile",
         path: "/profile"
       },
-      {
-        text: "Tasks",
-        path: "/tasks"
-      }
+      // {
+      //   text: "Tasks",
+      //   path: "/tasks"
+      // }
     ]
   }
-  ];
+];

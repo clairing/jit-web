@@ -10,12 +10,20 @@
     "postinstall": "npm run build-themes"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^3.0.0",
-    "node-sass": "^4.11.0",
-    "vue-router": "^4.0.1",
+    "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5",
+    "core-js": "^3.10.0",
     "devextreme": "^20.2.4",
-    "devextreme-vue": "^20.2.4"
+    "devextreme-vue": "^20.2.4",
+    "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "mockjs": "^1.1.0",
+    "node-sass": "^4.11.0",
+    "vue": "^3.0.0",
+    "vue-loader-v16": "^16.0.0-beta.5.4",
+    "vue-router": "^4.0.1",
+    "vuex": "^4.0.0",
+    "webpack": "^4.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -23,11 +31,11 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
+    "devextreme-cli": "1.2.11",
+    "devextreme-themebuilder": "^20.2.4",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
-    "devextreme-cli": "1.2.11",
-    "sass-loader": "^7.1.0",
-    "devextreme-themebuilder": "^20.2.4"
+    "sass-loader": "^7.1.0"
   },
   "eslintConfig": {
     "root": true,
