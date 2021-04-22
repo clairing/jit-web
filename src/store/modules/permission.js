@@ -41,17 +41,16 @@ const state = {
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
+    // debugger
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-    console.log(state);
   }
 }
 
 const actions = {
   generateRoutes({ commit }) {
     return new Promise(resolve => {
-      let accessedRoutes = asyncRoutes
-      console.log(accessedRoutes);
+      let accessedRoutes = asyncRoutes || []
       // if (roles.includes('admin')) {
       //   accessedRoutes = asyncRoutes || []
       // } else {

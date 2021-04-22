@@ -13,9 +13,21 @@ export default [
         path: "/profile"
       },
       // {
-      //   text: "Tasks",
-      //   path: "/tasks"
-      // }
+      //   text: "TaskExample",
+      //   path: "/tasks/example"
+      // },
+      {
+        text: "定时任务",
+        path: "/tasks/task-time"
+      },
+      {
+        text: "调度任务",
+        path: "/tasks/task-dispatch"
+      },
+      {
+        text: "查询界面",
+        path: "/tasks/task-query"
+      }
     ]
   }
 ];

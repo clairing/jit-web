@@ -2,20 +2,20 @@ import Cookies from "js-cookie"
 
 const TokenKey = "dev-token"
 
-console.log('Auth:' + Cookies.get('DJITD_SITES_AUTH_V6.0'))
+// console.log('Auth:' + Cookies.get('DJITD_SITES_AUTH_V6.0'))
 export function getToken() {
-  console.log("cookie:" + Cookies.get(TokenKey))
+  // console.log("cookie:" + Cookies.get(TokenKey))
   if (Cookies.get(TokenKey)) {
-    return "admin_token"
+    return Cookies.get(TokenKey)
   }
   else {
     return ""
   }
 }
 var option = {}
-if (window.location.host != 'localhost:3001') {
-  option = { domain: ".djitd.com" }
-}
+// if (window.location.host != 'localhost:4000') {
+//   option = { domain: ".djitd.com" }
+// }
 export function setToken(token) {
   return Cookies.set(TokenKey, token, option)
 }

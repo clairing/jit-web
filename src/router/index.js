@@ -5,11 +5,13 @@ import Home from "@/views/home/index.vue";
 import defaultLayout from "@/layouts/side-nav-inner-toolbar";
 import simpleLayout from "@/layouts/single-card";
 import { getToken } from '@/utils/js-cookie';
-import notify from 'devextreme/ui/notify';
+// import notify from 'devextreme/ui/notify';
 function loadView(view, page = "index") {
-  return () => import(/* webpackChunkName: "login" */ `@/views/${view}/${page}.vue`)
+  return () => import(`@/views/${view}/${page}.vue`)
 }
-
+function loadChildView(view, page) {
+  return () => import(`@/views/${view}/${page}/index.vue`)
+}
 export const constantRoutes = [
   {
     path: "/home",
@@ -76,28 +78,90 @@ export const constantRoutes = [
     // path: "/:pathMatch(.*)*",
 
     path: '/:pathMatch(.*)', name: 'bad-not-found', redirect: "/home"
+  },
+  {
+    path: "/tasks/example",
+    name: "Example",
+    component: loadChildView("tasks", 'example'),
+    meta: {
+      title: "示例",
+      layout: defaultLayout
+    }
+  },
+  {
+    path: "/tasks/task-time",
+    name: "TimeTask",
+    component: loadChildView("tasks", 'task-time'),
+    meta: {
+      title: "定时任务",
+      layout: defaultLayout
+    }
+  },
+  {
+    path: "/tasks/task-dispatch",
+    name: "TaskDispatch",
+    component: loadChildView("tasks", 'task-dispatch'),
+    meta: {
+      title: "调度任务",
+      layout: defaultLayout
+    }
   }
+  ,
+  {
+    path: "/tasks/task-query",
+    name: "TaskQuery",
+    component: loadChildView("tasks", 'task-query'),
+    meta: {
+      title: "任务查询",
+      layout: defaultLayout
+    }
+  }
+  ,
+  {
+    path: "/tasks/task-query2",
+    name: "TaskQuery2",
+    component: loadChildView("tasks", 'task-query2'),
+    meta: {
+      title: "任务查询",
+      layout: simpleLayout
+    }
+  }
+  // {
+  //   path: "/tasks",
+  //   name: "Tasks",
+  //   redirect: "/tasks/time-task",
+  //   children: [{
+  //     path: "/tasks/example",
+  //     name: "Example",
+  //     component: loadChildView("tasks", 'example'),
+  //     meta: {
+  //       title: "示例",
+  //       layout: defaultLayout
+  //     }
+  //   },
+  //   {
+  //     path: "/tasks/time-task",
+  //     name: "TimeTask",
+  //     component: loadChildView("tasks", 'time-task'),
+  //     meta: {
+  //       title: "定时任务",
+  //       layout: defaultLayout
+  //     }
+  //   }
+  //   ]
+  // }
 ]
 
 
-export const asyncRoutes = [{
-  path: "/profile",
-  name: "profile",
-  meta: {
-    layout: defaultLayout
-  },
-  // component: loadView("profile")
-  component: () => import(`@/views/profile/index.vue`)
-},
-{
-  path: "/tasks",
-  name: "tasks",
-  meta: {
-    layout: defaultLayout
-  },
-  // component: loadView("task")
-  component: () => import(`@/views/task/index.vue`)
-}]
+export const asyncRoutes = [
+  {
+    path: "/profile",
+    name: "profile",
+    meta: {
+      layout: defaultLayout
+    },
+    component: loadView("profile")
+  }]
 
 const initRouter = () => createRouter({
   routes: constantRoutes,
@@ -110,10 +174,10 @@ const router = initRouter()
 
 
 
-notify("Warning message", "warning", 500);
+// notify("Warning message", "warning", 500);`
 const whiteList = ['/login', './create-account', '/reset-password', "/reset-password"];
 router.beforeEach(async (to, from, next) => {
-  // console.log(11);
+  // console.log(to);
   const hasToken = getToken()
   if (hasToken) {
     if (to.name === "login") {

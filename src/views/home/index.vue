@@ -108,13 +108,13 @@
 </template>
 <script>
 // import { reactive, ref } from 'vue';
-// import { useRoute, useRouter } from 'vue-router';
-// import { useStore } from "vuex";
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from "vuex";
 export default {
   setup() {
-    // console.log(useStore().getters);
-    // console.log(useRouter);
-    // console.log(useRoute);
+    console.log(useStore().getters);
+    console.log(useRouter);
+    console.log(useRoute);
     // console.log(process.env);
   },
 }

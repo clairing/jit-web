@@ -7,6 +7,6 @@ const getters = {
   roles: state => state.user.roles,
   routes: state => state.permission.routes,
   // addRoutes: state => state.permission.addRoutes,
-
+  changes: state => state.datagrid.changes,
 }
 export default getters

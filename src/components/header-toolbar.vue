@@ -48,7 +48,6 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
-    console.log(store);
     const email = ref("");
     email.value = store.getters.email;
     const userMenuItems = [{

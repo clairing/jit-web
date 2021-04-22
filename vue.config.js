@@ -3,12 +3,11 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 const name = "Djitd"
-const port = process.env.port || process.env.npm_config_port || 3001
+const port = process.env.port || process.env.npm_config_port || 4000
 module.exports = {
   publicPath: "/",
   outputDir: 'dist',
   assetsDir: 'static',
-  // lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -32,6 +31,7 @@ module.exports = {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
+    devtool: 'source-map',
     resolve: {
       alias: {
         '@': resolve('src')

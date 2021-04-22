@@ -1,12 +1,12 @@
 <template>
   <dx-scroll-view height="100%" width="100%" class="with-footer single-card">
-     <div class="dx-card content">
+    <!-- <div class="dx-card content">
       <div class="header">
         <div class="title">{{title}}</div>
         <div class="description">{{description}}</div>
       </div>
-      <slot />
-    </div>
+    </div> -->
+    <slot />
   </dx-scroll-view>
 </template>
 
@@ -27,10 +27,10 @@ export default {
     const description = ref("");
 
     watch(() => route.path,
-     () => {
+      () => {
         title.value = route.meta.title;
         description.value = route.meta.description;
-     }
+      }
     )
     return {
       title,
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
+@import '../themes/generated/variables.base.scss';
 
 .single-card {
   width: 100%;
@@ -61,22 +61,6 @@ export default {
       margin: 0;
       border: 0;
       flex-grow: 1;
-    }
-
-    .header {
-      margin-bottom: 30px;
-
-      .title {
-        color: $base-text-color;
-        line-height: 28px;
-        font-weight: 500;
-        font-size: 24px;
-      }
-
-      .description {
-        color: rgba($base-text-color, alpha($base-text-color) * 0.7);
-        line-height: 18px;
-      }
     }
   }
 }

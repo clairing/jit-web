@@ -1,46 +1,30 @@
 <template>
   <div class="side-nav-inner-toolbar">
-    <dx-drawer
-      class="drawer"
-      position="before"
-      template="menuTemplate"
-      v-model:opened="menuOpened"
-      :opened-state-mode="drawerOptions.menuMode"
-      :reveal-mode="drawerOptions.menuRevealMode"
-      :min-size="drawerOptions.minMenuSize"
-      :max-size="drawerOptions.maxMenuSize"
-      :shading="drawerOptions.shaderEnabled"
-      :close-on-outside-click="drawerOptions.closeOnOutsideClick"
-    >
+    <dx-drawer class="drawer" position="before" template="menuTemplate" v-model:opened="menuOpened"
+      :opened-state-mode="drawerOptions.menuMode" :reveal-mode="drawerOptions.menuRevealMode"
+      :min-size="drawerOptions.minMenuSize" :max-size="drawerOptions.maxMenuSize" :shading="drawerOptions.shaderEnabled"
+      :close-on-outside-click="drawerOptions.closeOnOutsideClick">
       <div class="container">
-        <header-toolbar
-          :menu-toggle-enabled="headerMenuTogglerEnabled"
-          :toggle-menu-func="toggleMenu"
-        />
+        <header-toolbar :menu-toggle-enabled="headerMenuTogglerEnabled" :toggle-menu-func="toggleMenu" />
         <dx-scroll-view ref="scrollViewRef" class="layout-body with-footer">
-          <slot />
+          <div class="main-container">
+            <slot />
+          </div>
           <slot name="footer" />
         </dx-scroll-view>
       </div>
       <template #menuTemplate>
-        <side-nav-menu
-          :compact-mode="!menuOpened"
-          @click="handleSideBarClick"
-        >
+        <side-nav-menu :compact-mode="!menuOpened" @click="handleSideBarClick">
           <dx-toolbar id="navigation-header">
             <dx-item v-if="!isXSmall" location="before" css-class="menu-button">
               <template #default>
-              <dx-button
-                icon="menu"
-                styling-mode="text"
-                @click="toggleMenu"
-              />
+                <dx-button icon="menu" styling-mode="text" @click="toggleMenu" />
               </template>
             </dx-item>
             <dx-item location="before" css-class="header-title dx-toolbar-label">
               <template #default>
                 <div>{{ title }}</div>
-                </template>
+              </template>
             </dx-item>
           </dx-toolbar>
         </side-nav-menu>
@@ -69,12 +53,12 @@ export default {
   },
   setup(props) {
     const route = useRoute();
-    
+    console.log(route)
     const scrollViewRef = ref(null);
     const menuOpened = ref(props.isLarge);
     const menuTemporaryOpened = ref(false);
 
-    function toggleMenu (e) {
+    function toggleMenu(e) {
       const pointerEvent = e.event;
       pointerEvent.stopPropagation();
       if (menuOpened.value) {
@@ -84,7 +68,7 @@ export default {
       menuOpened.value = !menuOpened.value;
     }
 
-    function handleSideBarClick () {
+    function handleSideBarClick() {
       if (menuOpened.value === false) {
         menuTemporaryOpened.value = true;
       }
@@ -117,7 +101,6 @@ export default {
         }
       }
     );
-    
     watch(
       () => route.path,
       () => {
@@ -172,7 +155,7 @@ export default {
 }
 
 #navigation-header {
-  @import "../themes/generated/variables.additional.scss";
+  @import '../themes/generated/variables.additional.scss';
   background-color: $base-accent;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 

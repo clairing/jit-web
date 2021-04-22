@@ -35,8 +35,10 @@
   border-left: 0;
 }
 
-.with-footer > .dx-scrollable-wrapper >
-.dx-scrollable-container > .dx-scrollable-content {
+.with-footer
+  > .dx-scrollable-wrapper
+  > .dx-scrollable-container
+  > .dx-scrollable-content {
   height: 100%;
 
   & > .dx-scrollview-content {
@@ -48,6 +50,38 @@
 
 #app {
   height: 100%;
- }
+}
 
 $side-panel-min-width: 60px;
+.dx-popup-wrapper > .dx-overlay-content {
+  opacity: 1 !important;
+  padding: 0 15px;
+}
+
+.offline .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+  background: gray;
+}
+
+.normal .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+  background: green;
+}
+
+.pause .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+  background: orange;
+}
+
+.error .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+  background: red;
+}
+.offline a {
+  color: gray;
+}
+.normal a {
+  color: green;
+}
+.pause a {
+  color: orange;
+}
+.error a {
+  color: red;
+}
