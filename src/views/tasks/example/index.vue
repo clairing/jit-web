@@ -1,7 +1,14 @@
 <template>
   <div>
-    <dx-data-grid class="dx-card wide-card" :data-source="dataSourceConfig" :focused-row-index="0" :show-borders="false"
-      :focused-row-enabled="true" :column-auto-width="true" :column-hiding-enabled="true">
+    <dx-data-grid
+      class="dx-card wide-card"
+      :data-source="dataSourceConfig"
+      :focused-row-index="0"
+      :show-borders="false"
+      :focused-row-enabled="true"
+      :column-auto-width="true"
+      :column-hiding-enabled="true"
+    >
       <dx-paging :page-size="10" />
       <dx-pager :show-page-size-selector="true" :show-info="true" />
       <dx-filter-row :visible="true" />
@@ -16,14 +23,33 @@
         <dx-lookup display-expr="name" value-expr="value" :data-source="priorities" />
       </dx-column>
 
-      <dx-column data-field="ResponsibleEmployee.Employee_Full_Name" caption="Assigned To" :allow-sorting="false"
-        :hiding-priority="7" />
+      <dx-column
+        data-field="ResponsibleEmployee.Employee_Full_Name"
+        caption="Assigned To"
+        :allow-sorting="false"
+        :hiding-priority="7"
+      />
 
-      <dx-column data-field="Task_Start_Date" caption="Start Date" data-type="date" :hiding-priority="3" />
+      <dx-column
+        data-field="Task_Start_Date"
+        caption="Start Date"
+        data-type="date"
+        :hiding-priority="3"
+      />
 
-      <dx-column data-field="Task_Due_Date" caption="Due Date" data-type="date" :hiding-priority="4" />
+      <dx-column
+        data-field="Task_Due_Date"
+        caption="Due Date"
+        data-type="date"
+        :hiding-priority="4"
+      />
 
-      <dx-column data-field="Task_Priority" caption="Priority" name="Priority" :hiding-priority="1" />
+      <dx-column
+        data-field="Task_Priority"
+        caption="Priority"
+        name="Priority"
+        :hiding-priority="1"
+      />
 
       <dx-column data-field="Task_Completion" caption="Completion" :hiding-priority="0" />
     </dx-data-grid>

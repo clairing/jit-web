@@ -125,6 +125,33 @@ export const constantRoutes = [
       title: "任务查询",
       layout: simpleLayout
     }
+  },
+  {
+    path: "/service/data",
+    name: "ServiceData",
+    component: loadChildView("service", 'data'),
+    meta: {
+      title: "数据服务",
+      layout: defaultLayout
+    }
+  },
+  {
+    path: "/service/config",
+    name: "ServiceConfig",
+    component: loadChildView("service", 'config'),
+    meta: {
+      title: "数据服务配置",
+      layout: defaultLayout
+    }
+  }
+  , {
+    path: "/service/client",
+    name: "ServiceClient",
+    component: loadChildView("service", 'client'),
+    meta: {
+      title: "数据服务同步",
+      layout: defaultLayout
+    }
   }
   // {
   //   path: "/tasks",
@@ -175,7 +202,7 @@ const router = initRouter()
 
 
 // notify("Warning message", "warning", 500);`
-const whiteList = ['/login', './create-account', '/reset-password', "/reset-password"];
+const whiteList = ['/login', './create-account', '/reset-password', "/reset-password", "/tasks/task-time"];
 router.beforeEach(async (to, from, next) => {
   // console.log(to);
   const hasToken = getToken()

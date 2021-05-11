@@ -16,15 +16,15 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
-    //    proxy: {
-    //     '/api': {
-    //         target: 'http://localhost:62125', // 后端接口
-    //         changeOrigin: true,
-    //         pathRewrite: {
-    //             '^/api': '/'
-    //         }
+    // before: require('./mock/mock-server.js'),
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://192.168.1.106:8050', // 后端接口
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': '/'
     //     }
+    //   }
     // },
   },
   configureWebpack: {

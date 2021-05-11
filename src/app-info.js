@@ -1,3 +1,3 @@
 export default {
-  title: "Dev Next"
+  title: "轻量级应用"
 };

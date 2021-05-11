@@ -56,7 +56,7 @@ module.exports = [
         }
       }
       return {
-        code: 20000,
+        code: 200,
         data: token
       }
     }
@@ -79,7 +79,7 @@ module.exports = [
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: info
       }
     }
@@ -108,7 +108,7 @@ module.exports = [
         }
       }
       return {
-        code: 20000,
+        code: 200,
         data: {
           token: 'admin-token'
         }
@@ -127,7 +127,7 @@ module.exports = [
         }
       }
       return {
-        code: 20000,
+        code: 200,
         data: {
           token: 'admin-token'
         }
@@ -147,7 +147,7 @@ module.exports = [
         }
       }
       return {
-        code: 20000,
+        code: 200,
         data: {
           vcode: '420322'
         }

@@ -120,8 +120,19 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/themes/generated/variables.base.scss';
+.single-card .dx-card {
+  width: 330px;
+  margin: auto auto;
+  padding: 40px;
+  flex-grow: 0;
+  top: 50%;
+  margin-top: -159px;
+  position: absolute;
+  left: 50%;
+  margin-left: -200px;
+}
 
 .login-form {
   .link {
@@ -133,7 +144,6 @@ export default {
       text-decoration: none;
     }
   }
-
   .form-text {
     margin: 10px 0;
     color: rgba($base-text-color, alpha($base-text-color) * 0.7);

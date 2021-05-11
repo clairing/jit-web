@@ -1,7 +1,8 @@
 <template>
   <div>
-    <DxDataGrid :data-source="dataSource" :height=600 key-expr="tpid" :show-borders="true" :focused-row-enabled="true"
-      :column-auto-width="true" :column-hiding-enabled="true" :repaint-changes-only="true">
+    <DxDataGrid :data-source="dataSource" :height=600 key-expr="tpid" :show-column-lines="true" :show-row-lines="true"
+      :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="true" :column-auto-width="true"
+      :column-hiding-enabled="true" :repaint-changes-only="true">
       <DxPaging :page-size="10" />
       <!-- :selection="{ mode: 'single' }" :focused-row-index="0"      @selection-changed="onSelectionChanged" -->
       <DxPaging :page-size="10" />

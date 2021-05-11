@@ -152,6 +152,7 @@ export default {
 
 .content {
   flex-grow: 1;
+  position: relative;
 }
 
 #navigation-header {

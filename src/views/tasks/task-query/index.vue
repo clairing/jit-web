@@ -1,17 +1,18 @@
 <template>
   <div>
-    <DxDataGrid :data-source="dataSource" :height=600 key-expr="tpid" :show-borders="true" :focused-row-enabled="true"
-      :column-auto-width="true" :column-hiding-enabled="true" :repaint-changes-only="true">
+    <DxDataGrid :data-source="dataSource" :height=600 key-expr="tpid" :show-column-lines="true" :show-row-lines="true"
+      :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="true" :column-auto-width="true"
+      :column-hiding-enabled="true" :repaint-changes-only="true">
       <DxPaging :page-size="10" />
       <!-- :selection="{ mode: 'single' }" :focused-row-index="0"      @selection-changed="onSelectionChanged" -->
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
       <!-- <DxColumn data-field="job_name" caption="任务类型" :allow-filtering='false' /> -->
-      <DxColumn data-field="need_download" caption="是否需要下载" data-type="boolean">
+      <DxColumn data-field="need_download" :caption="'下载'" data-type="boolean">
       </DxColumn>
-      <DxColumn data-field="need_callback" caption="是否需要回执" data-type="boolean">
+      <DxColumn data-field="need_callback" :caption="'回执'" data-type="boolean">
       </DxColumn>
-      <DxColumn data-field="need_notice" caption="是否需要通知" data-type="boolean">
+      <DxColumn data-field="need_notice" :caption="'通知'" data-type="boolean" @click="console.log(1)">
       </DxColumn>
       <DxColumn data-field="download_path" caption="下载地址" :visible="false" />
       <DxColumn data-field="callback_path" caption="回执地址" :visible="false" />
@@ -30,7 +31,7 @@
       <DxColumn data-field="" caption="查看结果" :allow-filtering='false' cell-template="taskTemplate" />
       <DxFilterRow :visible="true"></DxFilterRow>
       <template #taskTemplate="{data}">
-        <div class="task-a" @click="toggleTaskDetailVisble(data.key)">查看</div>
+        <div class="command-a" @click="toggleTaskDetailVisble(data.key)">查看</div>
       </template>
     </DxDataGrid>
     <!-- 必须用v-model:visbel,否则点击多次 -->
@@ -122,15 +123,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.task-a {
-  text-decoration: underline;
-  cursor: pointer;
-}
-.dx-row-focused {
-  .task-a {
-    color: #fff;
-  }
-}
 .dx-item .line {
   height: 1px;
   background: #ddd;

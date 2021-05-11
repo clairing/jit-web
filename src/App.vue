@@ -107,5 +107,6 @@ body {
 .main-container {
   padding: 20px;
   background: #fff;
+  // overflow: scroll;
 }
 </style>

@@ -37,7 +37,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.code !== 200) {
       // notify("11", "error", 2000);
       if (res.code === 50014) {
         notify("单点登录，需退出", "error", 2000);

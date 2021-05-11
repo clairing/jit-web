@@ -1,21 +1,29 @@
 <template>
   <form class="reset-password-form" @submit.prevent="onSubmit">
     <dx-form :form-data="formData" :disabled="loading">
-      <dx-item data-field="email" editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
+      <dx-item
+        data-field="email"
+        editor-type="dxTextBox"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }"
+      >
         <dx-required-rule message="Email is required" />
         <dx-email-rule message="Email is invalid" />
         <dx-label :visible="false" />
       </dx-item>
       <dx-button-item>
-        <dx-button-options :element-attr="{ class: 'submit-button' }" width="100%" type="default"
-          template="resetTemplate" :use-submit-behavior="true">
-        </dx-button-options>
+        <dx-button-options
+          :element-attr="{ class: 'submit-button' }"
+          width="100%"
+          type="default"
+          template="resetTemplate"
+          :use-submit-behavior="true"
+        ></dx-button-options>
       </dx-button-item>
       <dx-item>
         <template #default>
           <div class="login-link">
-            Return to <router-link to="/login">Sign In</router-link>
+            Return to
+            <router-link to="/login">Sign In</router-link>
           </div>
         </template>
       </dx-item>
@@ -93,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../themes/generated/variables.base.scss';
+@import "../themes/generated/variables.base.scss";
 
 .reset-password-form {
   .submit-button {

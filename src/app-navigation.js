@@ -29,5 +29,22 @@ export default [
         path: "/tasks/task-query"
       }
     ]
+  }, {
+    text: "数据服务",
+    icon: 'folder',
+    items: [
+      {
+        text: "数据服务",
+        path: "/service/data"
+      },
+      {
+        text: "数据服务配置",
+        path: "/service/config"
+      },
+      {
+        text: "数据同步服务",
+        path: "/service/client"
+      }
+    ]
   }
-];
+]
