@@ -2,29 +2,14 @@
 <template>
   <div>
     <div>
-      <DxDataGrid
-        :data-source="dataSource"
-        :height="500"
-        key-expr="id"
-        @toolbar-preparing="onToolbarPreparing($event)"
-        :show-column-lines="true"
-        :show-row-lines="true"
-        :show-borders="true"
-        :row-alternation-enabled="true"
-        :focused-row-enabled="true"
-        :column-auto-width="true"
-        :column-hiding-enabled="false"
-        :repaint-changes-only="true"
-        @editing-start="editingStart"
-        :grouping="{ autoExpandAll: true }"
-        :group-panel="{ visible: false }"
-        @content-ready="onContentReady"
-        :scrolling="{
+      <DxDataGrid :data-source="dataSource" :height="500" key-expr="id" @toolbar-preparing="onToolbarPreparing($event)"
+        :show-column-lines="true" :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true"
+        :focused-row-enabled="true" :column-auto-width="true" :column-hiding-enabled="false"
+        :repaint-changes-only="true" @editing-start="editingStart" :grouping="{ autoExpandAll: true }"
+        :group-panel="{ visible: false }" @content-ready="onContentReady" :scrolling="{
           showScrollbar: 'always',
           useNative: false
-        }"
-        :column-resizing-mode="'widget'"
-      >
+        }" :column-resizing-mode="'widget'">
         <DxPaging :page-size="10" />
         <DxFilterRow :visible="true" />
         <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
@@ -36,11 +21,7 @@
               <DxItem data-field="type" />
               <DxItem data-field="code" />
               <DxItem data-field="service_name" />
-              <DxItem
-                data-field="description"
-                editor-type="dxTextArea"
-                :editor-options="{ height: 100 }"
-              />
+              <DxItem data-field="description" editor-type="dxTextArea" :editor-options="{ height: 100 }" />
             </DxItem>
           </DxForm>
         </DxEditing>
@@ -66,7 +47,6 @@
       </DxDataGrid>
     </div>
     <div>
-      {{ org_id }}
       <!-- 企业 -->
     </div>
   </div>

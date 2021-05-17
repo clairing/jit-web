@@ -49,19 +49,19 @@
 
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
       <DxColumn data-field="job_name" caption="作业名称" :allow-filtering="false" :width="150" />
-      <DxColumn data-field="job_group" caption="作业组" :width="150" />
-      <DxColumn data-field="task_way" caption="任务方式" :width="150">
+      <DxColumn data-field="job_group" caption="作业组" />
+      <DxColumn data-field="task_way" caption="任务方式">
         <DxLookup :data-source="task_ways" value-expr="value" display-expr="text" />
       </DxColumn>
       <DxColumn data-field="interval" caption="间隔" :allow-filtering="false" :width="150" />
       <DxColumn data-field="status" caption="状态" cell-template="statusTemplate">
-        <DxLookup value-expr="value" display-expr="text" :data-source="status" />
+        <DxLookup value-expr="value" display-expr="text" :data-source="statusArr" />
       </DxColumn>
       <DxColumn data-field="tenant" caption="租户" :visible="false" />
       <DxColumn data-field="appid" caption="应用id" :visible="false" />
-      <DxColumn data-field="description" caption="描述" :width="'30%'" />
+      <DxColumn data-field="description" caption="描述" />
 
-      <DxColumn data-field caption="执行记录" :width="100" :allow-filtering="false" cell-template="taskTemplate" />
+      <DxColumn data-field caption="执行记录" :allow-filtering="false" cell-template="taskTemplate" />
       <DxColumn data-field="task_ways.local_type" caption="类型" :visible="false">
         <DxLookup value-expr="value" display-expr="text" :data-source="local_types" />
       </DxColumn>
@@ -72,13 +72,6 @@
       <DxColumn data-field="task_ways.restful_params" caption="参数" :visible="false" />
       <DxColumn data-field="task_ways.restful_method" caption="请求方式" :visible="false" />
       <DxColumn data-field="task_ways.description" caption="任务描述" :visible="false" />
-      <!-- <DxColumn data-field="level" caption="级别"></DxColumn>
-      <DxColumn data-field="appid" caption="应用"></DxColumn>
-      <DxColumn data-field="tenant" caption="租户"></DxColumn>
-      <DxColumn data-field="cby_time" data-type="date" caption="创建时间"></DxColumn>
-      <DxColumn data-field="exec_time" data-type="date" caption="最后执行时间"></DxColumn>
-      <DxColumn data-field="exec_status" caption="最后执行状态"></DxColumn>-->
-      <!-- <DxColumn data-filed="" caption=""></DxColumn> -->
       <DxFilterRow :visible="true"></DxFilterRow>
       <template #taskTemplate="{ data }">
         <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)">查看</div>
@@ -86,8 +79,7 @@
       <!-- 状态 -->
       <template #statusTemplate="{ data }">
         <div class="command-a text-center" :class="data.value" :id="'tmp' + data.key">
-          <a @click="handelStatus(data.key, data.value)"
-            @mouseleave="popoverVisible = false">{{ data.text }}{{data}}</a>
+          <a @click="handelStatus(data.key, data.value)" @mouseleave="popoverVisible = false">{{ data.text }}</a>
         </div>
       </template>>
     </DxDataGrid>
@@ -138,22 +130,30 @@ import { createStore } from "devextreme-aspnet-data-nojquery"
 // import { data } from './time-task'
 import { computed, reactive, ref, watch } from 'vue'
 import RecordDetail from '../components/TimeTaskDetail.vue'
-
+// import notify from 'devextreme/ui/notify';
 
 
 // var dataSource = data.data;
 export default {
   setup() {
-    const status = [{ value: "offline", text: "离线", editable: false }, { value: "normal", text: "正常", editable: true }, { value: "pause", text: "暂停", editable: true }, { value: "error", text: "异常", editable: false }]
+    // notify({
+    //   message: "修改状态成功",
+    //   position: {
+    //     my: 'center center',
+    //     at: 'center center'
+    //   },
+    //   width: 200
+    // }, 'success', 2000);
+    const statusArr = [{ value: "offline", text: "离线", editable: false }, { value: "normal", text: "正常", editable: true }, { value: "pause", text: "暂停", editable: true }, { value: "error", text: "异常", editable: false }]
     const task_ways = [{ value: "local", text: "本地任务" }, { value: "restful", text: "Restful任务" }]
     const local_types = [{ value: "dll", text: "dll" }, { value: "exe", text: "exe" }]
     const taskDetailVisible = ref(false);
-    const jodid = ref(0)
+    const jobid = ref(0)
     const type = ref("")
     const statusId = ref(0)
     const editRowKey = ref(0);
     const popoverVisible = ref(false)
-    const colorPriority = ref(status[0].value)
+    const colorPriority = ref(statusArr[0].value)
     const params = reactive({ "tenant": 'aaa' })
     // const store = useStore()
     // console.log(store);
@@ -161,14 +161,6 @@ export default {
     const tempType = ref("")
     const statusValue = ref("")
     const dataGrid = ref();// dataGrid 表格数据实例
-    // const changes = computed({
-    //   get() {
-    //     return store.getters.changes;
-    //   },
-    //   set(value) {
-    //     return store.dispatch("datagrid/setChanges", value)
-    //   }
-    // })
     const url = "http://192.168.1.106:8050/api/timedtask"
     const dataSource = createStore({
       key: "jobid",
@@ -204,27 +196,28 @@ export default {
           },
         })
     }
+    // 初始化
     function onContentReady() {
-      // document.querySelector(".dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit").innerText = "操作"
+      document.querySelector(".dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit").innerText = "操作"
       document.querySelector(".dx-freespace-row").style.height = 0
-      // document.querySelector(".dx-freespace-row ").style.height = 0
     }
+
     function toggleTaskDetailVisble(key, value = "local") {
-      jodid.value = key
+      jobid.value = key
       type.value = value
       taskDetailVisible.value = !taskDetailVisible.value
     }
 
     const statusText = computed(() => {
-      return status.filter(item => item.editable).map(item => item.value)
+      return statusArr.filter(item => item.editable).map(item => item.value)
     })
     const getTaskType = computed(() => {
       return changes.value[0]?.data?.task_way ?? null
-      // return null
     })
+
     // radio 模板
     function radioTemplate(itemData, _, itemElement) {
-      itemElement.innerText = status.filter(item => item.value == itemData)[0].text
+      itemElement.innerText = statusArr.filter(item => item.value == itemData)[0].text
     }
     function editingStart(res) {
       tempType.value = res.data.task_way
@@ -240,11 +233,12 @@ export default {
     watch(getTaskType, (newVal) => {
       tempType.value = newVal
     })
-
+    // 修改状态
     const onSelectionChanged = function ({ selectedRowsData }) {
       const data = selectedRowsData[0];
-      jodid.value = data.jodid
+      jobid.value = data.jodid
     }
+
     const changeSelectionPriority = function (e) {
       popoverVisible.value = false
       // statusValue.value = status.filter(item => item.val == val)
@@ -254,9 +248,10 @@ export default {
     return {
       dataSource,
       task_ways,
-      jodid,
+      jobid,
       statusId,
       type,
+      statusArr,
       pageSizes: [5, 10, 20],
       taskDetailVisible,
       popoverVisible,

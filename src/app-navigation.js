@@ -5,7 +5,7 @@ export default [
     icon: "home"
   },
   {
-    text: "Examples",
+    text: "任务管理",
     icon: "folder",
     items: [
       {
@@ -40,6 +40,10 @@ export default [
       {
         text: "数据服务配置",
         path: "/service/config"
+      },
+      {
+        text: "企业数据服务",
+        path: "/service/orgservice"
       },
       {
         text: "数据同步服务",

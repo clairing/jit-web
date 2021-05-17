@@ -2,25 +2,12 @@
 <template>
   <div>
     <div>
-      <DxDataGrid
-        :data-source="''"
-        :height="500"
-        key-expr="id"
-        @toolbar-preparing="onToolbarPreparing($event)"
-        :show-column-lines="true"
-        :show-row-lines="true"
-        :show-borders="true"
-        :row-alternation-enabled="true"
-        :focused-row-enabled="true"
-        :column-auto-width="true"
-        :column-hiding-enabled="false"
-        :repaint-changes-only="true"
-        :grouping="{ autoExpandAll: true }"
-        :group-panel="{ visible: false }"
-        @content-ready="onContentReady"
-        :scrolling="{ showScrollbar: 'always', useNative: false }"
-        :column-resizing-mode="'widget'"
-      >
+      <DxDataGrid :data-source="''" :height="500" key-expr="id" @toolbar-preparing="onToolbarPreparing($event)"
+        :show-column-lines="true" :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true"
+        :focused-row-enabled="true" :column-auto-width="true" :column-hiding-enabled="false"
+        :repaint-changes-only="true" :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }"
+        @content-ready="onContentReady" :scrolling="{ showScrollbar: 'always', useNative: false }"
+        :column-resizing-mode="'widget'">
         <DxPaging :page-size="10" />
         <DxFilterRow :visible="true" />
         <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
@@ -96,7 +83,6 @@ export default {
       });
     }
     function onContentReady() {
-      document.querySelector('.dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit').innerText = '操作';
       document.querySelector('.dx-freespace-row').style.height = 0;
     }
     return {

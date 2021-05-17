@@ -4,25 +4,16 @@
       <div class="image-container">
         <div class="user-image" />
       </div>
-      <div class="user-name">{{email}}</div>
+      <div class="user-name">{{name}}</div>
     </div>
 
-    <dx-context-menu
-      v-if="menuMode === 'context'"
-      target=".user-button"
-      :items="menuItems"
-      :width="210"
-      show-event="dxclick"
-      css-class="user-menu"
-    >
+    <dx-context-menu v-if="menuMode === 'context'" target=".user-button" :items="menuItems" :width="210"
+      show-event="dxclick" css-class="user-menu">
       <dx-position my="top center" at="bottom center" />
     </dx-context-menu>
 
-    <dx-list
-      v-if="menuMode === 'list'"
-      class="dx-toolbar-menu-action"
-      :items="menuItems"
-    />
+    <dx-list v-if="menuMode === 'list'" class="dx-toolbar-menu-action" :items="menuItems" />
+
   </div>
 </template>
 
@@ -34,7 +25,7 @@ export default {
   props: {
     menuMode: String,
     menuItems: Array,
-    email: String
+    name: String
   },
   components: {
     DxContextMenu,
@@ -45,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
+@import '../themes/generated/variables.base.scss';
 
 .user-info {
   display: flex;
@@ -68,7 +59,7 @@ export default {
     .user-image {
       width: 100%;
       height: 100%;
-      background: url("https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png")
+      background: url('https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png')
         no-repeat #fff;
       background-size: cover;
     }

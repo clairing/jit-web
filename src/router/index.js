@@ -153,6 +153,15 @@ export const constantRoutes = [
       layout: defaultLayout
     }
   }
+  , {
+    path: "/service/orgservice",
+    name: "ServiceOrgService",
+    component: loadChildView("service", 'orgservice'),
+    meta: {
+      title: "企业数据服务",
+      layout: defaultLayout
+    }
+  }
   // {
   //   path: "/tasks",
   //   name: "Tasks",

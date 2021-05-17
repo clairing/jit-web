@@ -40,7 +40,6 @@ export default {
     }
 
     function handleItemClick(e) {
-      console.log(e.itemData.path);
       if (!e.itemData.path || props.compactMode) {
         return;
       }

@@ -27,11 +27,19 @@
       <DxColumn data-field="creation_time" caption="任务下派时间" :allow-editing="false" format="yyyy-MM-dd HH:mm:ss" />
       <DxColumn data-field="start_time" caption="任务开始时间" :allow-editing="false" format="yyyy-MM-dd hh:mm:ss" />
       <DxColumn data-field="end_time" caption="任务完成时间" :allow-editing="false" format="yyyy-MM-dd hh:mm:ss" />
-      <DxColumn data-field="" caption="执行记录" :allow-filtering='false' cell-template="taskTemplate" />
-      <DxColumn data-field="" caption="查看结果" :allow-filtering='false' cell-template="taskTemplate" />
+      <DxColumn data-field caption="执行记录" :allow-filtering="false" cell-template="logTemplate" />
+      <DxColumn data-field caption="查看结果" :allow-filtering="false" cell-template="downloadResultTemplate" width="120" />
       <DxFilterRow :visible="true"></DxFilterRow>
-      <template #taskTemplate="{data}">
-        <div class="command-a" @click="toggleTaskDetailVisble(data.key)">查看</div>
+      <!-- 查看结果 -->
+      <!-- 当需要下载的时候，才可以查看 -->
+      <template #downloadResultTemplate="{ data }">
+        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)" v-if="data.data.need_download">查看
+        </div>
+      </template>
+      <!-- 查询日志 -->
+      <template #logTemplate="{ data }">
+        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)">查看
+        </div>
       </template>
     </DxDataGrid>
     <!-- 必须用v-model:visbel,否则点击多次 -->

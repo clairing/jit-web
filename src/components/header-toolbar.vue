@@ -15,14 +15,13 @@
         <template #default>
           <div>
             <dx-button class="user-button authorization" :width="210" height="100%" styling-mode="text">
-              <user-panel :email="email" :menu-items="userMenuItems" menu-mode="context" />
+              <user-panel :name="name" :menu-items="userMenuItems" menu-mode="context" />
             </dx-button>
           </div>
         </template>
       </dx-item>
-
       <template #menuUserItem>
-        <user-panel :email="email" :menu-items="userMenuItems" menu-mode="list" />
+        <user-panel :name="name" :menu-items="userMenuItems" menu-mode="list" />
       </template>
     </dx-toolbar>
   </header>
@@ -48,8 +47,9 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
-    const email = ref("");
-    email.value = store.getters.email;
+    const name = ref("");
+    name.value = store.getters.name;
+    console.log(name);
     const userMenuItems = [{
       text: "Profile",
       icon: "user",
@@ -61,6 +61,7 @@ export default {
       onClick: onLogoutClick
     }];
 
+    // 退出登录
     function onLogoutClick() {
       store.dispatch("user/logout")
         .then((res) => {
@@ -82,7 +83,7 @@ export default {
     }
 
     return {
-      email,
+      name,
       userMenuItems
     };
   },

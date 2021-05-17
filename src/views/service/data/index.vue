@@ -1,6 +1,6 @@
 <template>
   <MainServer :canEditing="true" @emitData="emitData" />
-  <DxPopup v-model:visible="logVisible" title="日志记录" :show-title="true">
+  <DxPopup v-model:visible="tempData.chVisible" title="日志记录" :show-title="true">
     <SubServer :type="tempData.type" :cid="tempData.cid" />
   </DxPopup>
 </template>
@@ -16,12 +16,11 @@ import { reactive } from "vue"
 export default {
   setup() {
     let tempData = reactive({
-      chVisible: false,
+      chVisible: true,
       cid: 0,
       type: 0
     })
     function emitData(data) {
-      console.log(data);
       Object.assign(tempData, data)
     }
     return {

@@ -1,27 +1,12 @@
 
 <template>
   <div>
-    <DxTreeList
-      id="tasks"
-      :data-source="dataSource"
-      @content-ready="onContentReady"
-      @editor-preparing="onEditorPreparing"
-      @init-new-row="onInitNewRow"
-      @cell-prepared="onCellPrepared"
-      :show-borders="true"
-      :height="500"
-      :column-auto-width="true"
-      :word-wrap-enabled="true"
-      key-expr="id"
-      parent-id-expr="parent_id"
-      :show-column-lines="true"
-      :show-row-lines="true"
-      :selection="{ mode: 'none' }"
-      :data-structure="'plain'"
-      :row-alternation-enabled="true"
-      :scrolling="{ mode: 'standard' }"
-      :auto-expand-all="true"
-    >
+    <DxTreeList id="tasks" :data-source="dataSource" @content-ready="onContentReady"
+      @editor-preparing="onEditorPreparing" @init-new-row="onInitNewRow" @cell-prepared="onCellPrepared"
+      :show-borders="true" :height="500" :column-auto-width="true" :word-wrap-enabled="true" key-expr="id"
+      parent-id-expr="parent_id" :show-column-lines="true" :show-row-lines="true" :selection="{ mode: 'none' }"
+      :data-structure="'plain'" :row-alternation-enabled="true" :scrolling="{ mode: 'standard' }"
+      :auto-expand-all="true">
       <DxSearchPanel :visible="true" :width="250" />
       <DxHeaderFilter :visible="true" />
       <DxSelection mode="single" />
@@ -34,7 +19,9 @@
       <DxColumn :min-width="120" data-field="service_type" caption="服务类型">
         <DxLookup :data-source="use_types" value-expr="value" display-expr="text" />
       </DxColumn>
-      <DxColumn data-field="expense_type" caption="收费类型" />
+      <DxColumn data-field="expense_type" caption="收费类型">
+        <DxLookup :data-source="expense_types" value-expr="value" display-expr="text" />
+      </DxColumn>
       <DxColumn data-field="expire_time" caption="到期时间" />
       <DxColumn data-field="count" caption="次数" />
       <DxColumn data-field="status" caption="启用" cell-template="statusTemplate" />
@@ -48,25 +35,13 @@
         <a class="command-a" @click="showDetailData(data)">查看</a>
       </template>
       <template #statusTemplate="{ data }">
-        <DxSwitch
-          v-model:value="data.value"
-          switched-off-text="停用"
-          switched-on-text="启用"
-          :width="80"
-          @value-changed="handelSwitchChange(data.key, data.value)"
-        />
+        <DxSwitch v-model:value="data.value" switched-off-text="停用" switched-on-text="启用" :width="80"
+          @value-changed="handelSwitchChange(data.key, data.value)" />
       </template>
     </DxTreeList>
-    
-    <DxPopup
-      :width="900"
-      :height="400"
-      :show-title="true"
-      :close-on-outside-click="true"
-      v-model:visible="logVisible"
-      position="center"
-      title="日志记录"
-    >
+
+    <DxPopup :width="900" :height="400" :show-title="true" :close-on-outside-click="true" v-model:visible="logVisible"
+      position="center" title="日志记录">
       <LogDetail />
     </DxPopup>
   </div>
@@ -89,7 +64,9 @@ import LogDetail from '@/views/service/components/LogDetail.vue'
 import { ref } from "vue"
 import { tasks } from './data.js'
 const use_types = [{ value: "synchronous", text: "先用后付" }, { value: "request", text: "先付后用" }]
+const expense_types = [{ value: "synchronous", text: "时间收费" }, { value: "request", text: "次数收费" }]
 import { nextTick } from 'vue'
+import { useRouter } from 'vue-router';
 export default {
   props: {
     cid: {
@@ -97,7 +74,8 @@ export default {
       default: 0
     }
   },
-  setup() {
+  setup(props, { emit }) {
+    const router = useRouter();
     const logVisible = ref(false)
     //1、要解决问题的：父元素的id为O，则编辑添加的时候，禁用某些cell, 
     //2、子级去掉新增
@@ -107,7 +85,7 @@ export default {
         e.cellElement.style.backGroundColor = "#f00"
         if (e.data.parent_id != 0) {
           var el = e.cellElement.querySelector(".dx-link-add") ?? null;
-          nextTick(function() {
+          nextTick(function () {
             if (el) { el.parentNode.removeChild(el) }
           });
         }
@@ -148,9 +126,17 @@ export default {
     function handelSwitchChange(key, value) {
       console.log(key, value);
     }
+    // 详情跳转页面
+    function showDetailData(column) {
+      // 关闭租户数据服务弹窗
+      emit("emitData", { "type": column.data.type, "chVisible": false, "cid": column.data.id })
+      // 跳转至企业数据服务界面
+      router.push({ name: "ServiceOrgService", params: { org_id: column.data.org_id } })
+    }
     return {
       dataSource: tasks,
       use_types,
+      expense_types,
       logVisible,
 
       onContentReady,
@@ -158,7 +144,8 @@ export default {
       onEditorPreparing,
       onInitNewRow,
       handelSwitchChange,
-      showLogData
+      showLogData,
+      showDetailData
     }
 
 
