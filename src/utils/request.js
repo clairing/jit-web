@@ -16,7 +16,7 @@ import notify from 'devextreme/ui/notify';
 //   expiresIn: 60 //秒到期时间
 // });
 // console.log(token)
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 const service = axios.create({
   baseURL: process.APP_BASE_API,
   timeout: 50000

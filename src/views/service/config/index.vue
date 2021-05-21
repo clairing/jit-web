@@ -18,7 +18,7 @@ import { reactive } from 'vue'
 export default {
   setup() {
     let tempData = reactive({
-      chVisible: true,
+      chVisible: false,
       cid: 0,
       org_id: 0
     })

@@ -79,7 +79,7 @@
       <!-- 状态 -->
       <template #statusTemplate="{ data }">
         <div class="command-a text-center" :class="data.value" :id="'tmp' + data.key">
-          <a @click="handelStatus(data.key, data.value)" @mouseleave="popoverVisible = false">{{ data.text }}</a>
+          <a @click="handelStatus(data.key, data.value)">{{ data.text }}</a>
         </div>
       </template>>
     </DxDataGrid>
@@ -102,7 +102,6 @@
         </div>
       </div>
     </DxPopover>
-    {{ statusValue }}
   </div>
 </template>
 
@@ -118,32 +117,19 @@ import {
   DxFilterRow,
   DxForm,
 } from 'devextreme-vue/data-grid'
-
 import { DxItem, DxSimpleItem } from 'devextreme-vue/form'
-// import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxPopup as Popup } from 'devextreme-vue/popup'
 import { DxPopover } from 'devextreme-vue/popover'
 import DxRadioGroup from 'devextreme-vue/radio-group'
-
-// import { useStore } from 'vuex';
 import { createStore } from "devextreme-aspnet-data-nojquery"
-// import { data } from './time-task'
 import { computed, reactive, ref, watch } from 'vue'
 import RecordDetail from '../components/TimeTaskDetail.vue'
-// import notify from 'devextreme/ui/notify';
-
-
-// var dataSource = data.data;
+import notify from 'devextreme/ui/notify';
+import request from '@/utils/request'
+import { resumejob } from '@/api/task'
 export default {
   setup() {
-    // notify({
-    //   message: "修改状态成功",
-    //   position: {
-    //     my: 'center center',
-    //     at: 'center center'
-    //   },
-    //   width: 200
-    // }, 'success', 2000);
+
     const statusArr = [{ value: "offline", text: "离线", editable: false }, { value: "normal", text: "正常", editable: true }, { value: "pause", text: "暂停", editable: true }, { value: "error", text: "异常", editable: false }]
     const task_ways = [{ value: "local", text: "本地任务" }, { value: "restful", text: "Restful任务" }]
     const local_types = [{ value: "dll", text: "dll" }, { value: "exe", text: "exe" }]
@@ -194,7 +180,33 @@ export default {
               dataGrid.value.instance.refresh()
             },
           },
-        })
+        },
+        {
+          location: 'before',
+          widget: 'dxButton',
+          options: {
+            width: 120,
+            type: 'success',
+            icon: 'link',
+            text: '恢复正常',
+            onClick: () => {
+              console.log(params);
+            },
+          },
+        }, {
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          width: 120,
+          type: 'default',
+          icon: 'video',
+          text: '暂停',
+          onClick: () => {
+            console.log(params);
+          },
+        },
+      }
+      )
     }
     // 初始化
     function onContentReady() {
@@ -222,11 +234,12 @@ export default {
     function editingStart(res) {
       tempType.value = res.data.task_way
     }
+    // 
     function handelStatus(key, value) {
       statusId.value = key
       popoverVisible.value = true
-      console.log(value);
       statusValue.value = value
+
     }
 
 
@@ -237,6 +250,7 @@ export default {
     const onSelectionChanged = function ({ selectedRowsData }) {
       const data = selectedRowsData[0];
       jobid.value = data.jodid
+      request
     }
 
     const changeSelectionPriority = function (e) {
@@ -244,6 +258,28 @@ export default {
       // statusValue.value = status.filter(item => item.val == val)
       status,
         console.log(e);
+      resumejob({ "key": jobid }).then((response) => {
+        const { data } = response
+        console.log(data);
+        notify({
+          message: data.message,
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'success', 2000);
+
+      }).catch(error => {
+        notify({
+          message: error.message,
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'error', 2000);
+      })
     }
     return {
       dataSource,
