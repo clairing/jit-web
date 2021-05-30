@@ -52,7 +52,7 @@
 
 <script>
 import "devextreme/data/odata/store";
-import DataGrid from '@/components/dev/DxDataGrid.vue'
+import DataGrid from '@/dev/DxDataGrid.vue'
 import {
   DxColumn,
   DxLookup,

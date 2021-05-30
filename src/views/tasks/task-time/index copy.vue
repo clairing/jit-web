@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import DxDataGrid from '@/components/dev/DxDataGrid.vue'
+import DxDataGrid from '@/dev/DxDataGrid.vue'
 import { DxColumn, DxLookup, DxPopup, DxEditing, DxForm } from 'devextreme-vue/data-grid'
 import { DxItem, DxSimpleItem } from 'devextreme-vue/form'
 import { DxPopup as Popup } from 'devextreme-vue/popup'

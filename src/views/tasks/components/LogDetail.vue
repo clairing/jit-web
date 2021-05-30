@@ -35,8 +35,8 @@
 </template>s
 
 <script>
-import DxDataGrid from '@/components/dev/DxDataGrid.vue'
 import {
+  DxDataGrid,
   DxColumn,
   DxPaging,
   DxPager
@@ -49,15 +49,16 @@ export default {
     // 传递的参数
     paramaid: {
       type: String,
-      default: ""
+      default: "73239085be4a4138aa88b7326378bb0a"
     },
     // 日志类型 type:"time": 定时任务  dispatch :"派发任务"
     type: {
       type: String,
-      default: ""
+      default: "time"
     }
   },
   setup(props) {
+    console.log(props.paramaid, props.type);
     const params = reactive({ paramaid: "" })
     const dataSource = ref(null)
     // 获取当前vue实例

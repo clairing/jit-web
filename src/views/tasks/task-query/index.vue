@@ -1,13 +1,31 @@
 <template>
   <div>
-    <DxDataGrid ref="dataGrid" :data-source="dataSource" :height="height" key-expr="tpid" :show-column-lines="true"
-      :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="true"
-      :column-auto-width="true" :column-hiding-enabled="false" :column-fixing="{ enabled: true }"
-      :repaint-changes-only="true" @toolbar-preparing="onToolbarPreparing" @content-ready="onContentReady"
-      :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
+    <DxDataGrid
+      ref="dataGrid"
+      :data-source="dataSource"
+      :height="height"
+      key-expr="tpid"
+      :show-column-lines="true"
+      :show-row-lines="true"
+      :show-borders="true"
+      :row-alternation-enabled="true"
+      :focused-row-enabled="true"
+      :column-auto-width="true"
+      :column-hiding-enabled="false"
+      :column-fixing="{ enabled: true }"
+      :repaint-changes-only="true"
+      @toolbar-preparing="onToolbarPreparing"
+      @content-ready="onContentReady"
+      :grouping="{ autoExpandAll: true }"
+      :group-panel="{ visible: false }"
+      :scrolling="{
         showScrollbar: 'always',
         useNative: false
-      }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }" @selection-changed="onSelectionChanged">
+      }"
+      :column-resizing-mode="'widget'"
+      :selection="{ mode: 'single' }"
+      @selection-changed="onSelectionChanged"
+    >
       @selection-changed="onSelectionChanged">
       <DxPaging :page-size="10" />
       <DxEditing mode="popup" :allow-adding="false" :allow-deleting="false" :allow-updating="true">
@@ -65,14 +83,39 @@
       <!-- <DxColumn data-field="job_name" caption="任务类型" :allow-filtering='false' /> -->
       <DxColumn data-field="job_name" caption="任务名" :allow-filtering="false" width="180" />
       <DxColumn data-field="job_desc" caption="任务描述" width="200" />
-      <DxColumn data-field="need_download" caption="下载" data-type="boolean" width="100"
-        header-cell-template="headerCellTemplate"></DxColumn>
-      <DxColumn data-field="need_callback" caption="回执" width="100" data-type="boolean"
-        header-cell-template="headerCellTemplate"></DxColumn>
-      <DxColumn data-field="need_notice" caption="通知" width="100" data-type="boolean"
-        header-cell-template="headerCellTemplate"></DxColumn>
-      <DxColumn data-field="job_status" :width="150" caption="状态" :allow-editing="false" :allow-filtering="!seeDone">
-        <DxLookup value-expr="value" display-expr="text" :data-source="!seeDone?status:status1" />
+      <DxColumn
+        data-field="need_download"
+        caption="下载"
+        data-type="boolean"
+        width="100"
+        header-cell-template="headerCellTemplate"
+      ></DxColumn>
+      <DxColumn
+        data-field="need_callback"
+        caption="回执"
+        width="100"
+        data-type="boolean"
+        header-cell-template="headerCellTemplate"
+      ></DxColumn>
+      <DxColumn
+        data-field="need_notice"
+        caption="通知"
+        width="100"
+        data-type="boolean"
+        header-cell-template="headerCellTemplate"
+      ></DxColumn>
+      <DxColumn
+        data-field="job_status"
+        :width="150"
+        caption="状态"
+        :allow-editing="false"
+        :allow-filtering="!seeDone"
+      >
+        <DxLookup
+          value-expr="value"
+          display-expr="text"
+          :data-source="!seeDone ? status : status1"
+        />
       </DxColumn>
       <DxColumn data-field="tenant" caption="租户" :visible="false" />
       <DxColumn data-field="download_path" caption="下载地址" :visible="false" />
@@ -83,40 +126,66 @@
       <DxColumn data-field="notice_phone" caption="短信" :visible="false" />
       <DxColumn data-field="src" caption="来源" />
       <DxColumn data-field="job_progress" caption="进度" />
-      <DxColumn data-field="creation_time" caption="任务下派时间" data-type="date" :allow-editing="false"
-        format="yyyy-MM-dd HH:mm:ss" />
-      <DxColumn data-field="start_time" caption="任务开始时间" data-type="date" :allow-editing="false"
-        format="yyyy-MM-dd hh:mm:ss" />
-      <DxColumn data-field="end_time" caption="任务完成时间" data-type="date" :allow-editing="false"
-        format="yyyy-MM-dd hh:mm:ss" />
+      <DxColumn
+        data-field="creation_time"
+        caption="任务下派时间"
+        data-type="date"
+        :allow-editing="false"
+        format="yyyy-MM-dd HH:mm:ss"
+      />
+      <DxColumn
+        data-field="start_time"
+        caption="任务开始时间"
+        data-type="date"
+        :allow-editing="false"
+        format="yyyy-MM-dd hh:mm:ss"
+      />
+      <DxColumn
+        data-field="end_time"
+        caption="任务完成时间"
+        data-type="date"
+        :allow-editing="false"
+        format="yyyy-MM-dd hh:mm:ss"
+      />
       <DxColumn data-field caption="执行记录" :allow-filtering="false" cell-template="logTemplate" />
-      <DxColumn data-field caption="查看结果" :allow-filtering="false" cell-template="downloadResultTemplate" width="120" />
+      <DxColumn
+        data-field
+        caption="查看结果"
+        :allow-filtering="false"
+        cell-template="downloadResultTemplate"
+        width="120"
+      />
       <DxFilterRow :visible="true"></DxFilterRow>
       <!-- 查看结果 -->
       <!-- 当需要下载的时候，才可以查看 -->
       <template #downloadResultTemplate="{ data }">
-        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)" v-if="data.data.need_download">查看
-        </div>
+        <div
+          class="task-a text-center"
+          @click="showDownloadResult(data.key)"
+          v-if="data.data.need_download"
+        >查看</div>
       </template>
       <!-- 查询日志 -->
       <template #logTemplate="{ data }">
-        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)">查看
-        </div>
+        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)">查看</div>
       </template>
       <!-- 状态结果 -->
       <!-- <template #statusTemplate="{ data }">
         <div class="task-a text-center" :id="'tmp' + data.key" @click="handelStatus(data.key, data.value)">
           {{ data.text }}</div>
-      </template> -->
+      </template>-->
       <!-- 头部标题模板 -->
       <template #headerCellTemplate="{ data }">
-        <div class="text-center" :title="
+        <div
+          class="text-center"
+          :title="
             data.column.name == 'need_download'
               ? '是否需要下载'
               : data.column.name == 'need_callback'
                 ? '是否需要回执'
                 : '是否需要通知'
-          ">
+          "
+        >
           {{
             data.column.name == 'need_download'
               ? '下载'
@@ -131,8 +200,15 @@
       </template>
     </DxDataGrid>
     <!-- 必须用v-model:visbel,否则点击多次 -->
-    <Popup :width="800" :height="400" :show-title="true" :close-on-outside-click="true"
-      v-model:visible="taskDetailVisible" position="center" title="日志记录">
+    <Popup
+      :width="800"
+      :height="400"
+      :show-title="true"
+      :close-on-outside-click="true"
+      v-model:visible="taskDetailVisible"
+      position="center"
+      title="日志记录"
+    >
       <LogDetail :paramaid="tpid" type="dispatch"></LogDetail>
     </Popup>
   </div>
@@ -237,7 +313,7 @@ export default {
             // value: new Date(),
             placeholder: '开始时间',
             displayFormat: 'yyyy-MM-dd',
-            onValueChanged: function (data) {
+            onValueChanged: function(data) {
               params.bdate = dateFormat(data.value);
             },
           },
@@ -250,7 +326,7 @@ export default {
             // value: new Date(),
             placeholder: '结束时间',
             displayFormat: 'yyyy-MM-dd',
-            onValueChanged: function (data) {
+            onValueChanged: function(data) {
               params.edate = dateFormat(data.value);
             },
           },
@@ -298,6 +374,9 @@ export default {
       taskDetailVisible.value = !taskDetailVisible.value;
     }
 
+    function showDownloadResult() {
+      notify("1")
+    }
 
     function handelStatus(type) {
       console.log(selData);
@@ -394,6 +473,7 @@ export default {
 
       refreshDataGrid,
       toggleTaskDetailVisble,
+      showDownloadResult,
       onToolbarPreparing,
       handelStatus,
       handelRadioChange,

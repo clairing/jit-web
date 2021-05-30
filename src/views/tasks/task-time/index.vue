@@ -193,8 +193,9 @@ export default {
     const tempType = ref("")
     const statusValue = ref("")
     const dataGrid = ref(null);// dataGrid 表格数据实例
-    const internalInstance = getCurrentInstance()
-    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    const ctx = getCurrentInstance()
+    let $url = ctx.appContext.config.globalProperties.$appInfo.$http
+    ctx.$alert('11')
     const url = `${$url}/api/timedtask`;
     const dataSource = createStore({
       key: "jobid",
@@ -271,11 +272,11 @@ export default {
       document.querySelector(".dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit").innerText = "操作"
       document.querySelector(".dx-freespace-row").style.height = 0
     }
-
+    // 显示日志
     function toggleTaskDetailVisble(key, value = "local") {
       selData.jobid = key
       type.value = value
-      taskDetailVisible.value = !taskDetailVisible.value
+      taskDetailVisible.value = true
     }
 
     const statusText = computed(() => {
@@ -285,10 +286,6 @@ export default {
       return changes.value[0]?.data?.task_way ?? null
     })
 
-    // radio 模板
-    function radioTemplate(itemData, _, itemElement) {
-      itemElement.innerText = statusArr.filter(item => item.value == itemData)[0].text
-    }
     // 处理编辑时的任务方式
     function editingStart(res) {
       tempType.value = res.data.task_way
@@ -296,7 +293,7 @@ export default {
     function onRowDblClick(e) {
       e.component.editRow(e.component.getRowIndexByKey(e.key));
     }
-    // 
+    // 修改任务状态
     function handelStatus(type) {
       let fn = type === "normal" ? resumejob : stopjob
       if (!selData.jobid) {
@@ -383,7 +380,6 @@ export default {
       colorPriority,
       statusText,
       statusValue,
-      radioTemplate,
       onContentReady,
       editingStart,
       toggleTaskDetailVisble,
