@@ -51,12 +51,12 @@ module.exports = [
       // mock error
       if (!token) {
         return {
-          code: 60204,
+          status: 60204,
           message: 'Account and password are incorrect.'
         }
       }
       return {
-        code: 200,
+        status: 200,
         data: token
       }
     }
@@ -73,13 +73,13 @@ module.exports = [
       // mock error
       if (!info) {
         return {
-          code: 50008,
+          status: 50008,
           message: 'Login failed, unable to get user details.'
         }
       }
 
       return {
-        code: 200,
+        status: 200,
         data: info
       }
     }
@@ -91,7 +91,7 @@ module.exports = [
     type: 'post',
     response: _ => {
       return {
-        code: 200,
+        status: 200,
         data: 'success'
       }
     }
@@ -100,15 +100,15 @@ module.exports = [
     url: '/user/wxLogin',
     type: 'post',
     response: config => {
-      const { code } = config.body
-      if (!code) {
+      const { status } = config.body
+      if (!status) {
         return {
-          code: 50008,
+          status: 50008,
           message: 'Login failed, unable to get user details.'
         }
       }
       return {
-        code: 200,
+        status: 200,
         data: {
           token: 'admin-token'
         }
@@ -119,15 +119,15 @@ module.exports = [
     url: '/user/phoneLogin',
     type: 'post',
     response: config => {
-      const { vcode } = config.body
-      if (!vcode) {
+      const { vstatus } = config.body
+      if (!vstatus) {
         return {
-          code: 50008,
+          status: 50008,
           message: 'Login failed, unable to get user details.'
         }
       }
       return {
-        code: 200,
+        status: 200,
         data: {
           token: 'admin-token'
         }
@@ -135,21 +135,21 @@ module.exports = [
     }
   },
   {
-    url: '/user/getVcode',
+    url: '/user/getVstatus',
     type: 'post',
     response: config => {
-      const { phone, pcode } = config.body
+      const { phone, pstatus } = config.body
       console.log(config.body)
-      if (!phone || !pcode) {
+      if (!phone || !pstatus) {
         return {
-          code: 50000,
+          status: 50000,
           message: '发送失败!'
         }
       }
       return {
-        code: 200,
+        status: 200,
         data: {
-          vcode: '420322'
+          vstatus: '420322'
         }
       }
     }

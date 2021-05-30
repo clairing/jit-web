@@ -1,19 +1,80 @@
 <template>
   <div>
-    <DxDataGrid :data-source="dataSource" :height=600 key-expr="tpid" :show-column-lines="true" :show-row-lines="true"
-      :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="true" :column-auto-width="true"
-      :column-hiding-enabled="true" :repaint-changes-only="true">
+    <DxDataGrid ref="dataGrid" :data-source="dataSource" :height="height" key-expr="tpid" :show-column-lines="true"
+      :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="true"
+      :column-auto-width="true" :column-hiding-enabled="false" :column-fixing="{ enabled: true }"
+      :repaint-changes-only="true" @toolbar-preparing="onToolbarPreparing" @content-ready="onContentReady"
+      :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
+        showScrollbar: 'always',
+        useNative: false
+      }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }" @selection-changed="onSelectionChanged">
+      @selection-changed="onSelectionChanged">
       <DxPaging :page-size="10" />
-      <!-- :selection="{ mode: 'single' }" :focused-row-index="0"      @selection-changed="onSelectionChanged" -->
+      <DxEditing mode="popup" :allow-adding="false" :allow-deleting="false" :allow-updating="true">
+        <DxPopup :show-title="true" :width="800" :height="625" :title="'调度任务信息'" />
+        <DxForm>
+          <DxItem data-field="tenant" :col-count="1" :col-span="2" />
+          <DxItem :col-count="1" :col-span="2" item-type="group">
+            <DxItem data-field="need_download" />
+          </DxItem>
+          <DxItem :col-count="1" :col-span="2" item-type="group">
+            <DxSimpleItem>
+              <template #default>
+                <div class="line"></div>
+              </template>
+            </DxSimpleItem>
+          </DxItem>
+          <DxItem :col-count="2" :col-span="2" item-type="group">
+            <DxItem data-field="need_callback" />
+            <DxItem data-field="callback_path" />
+            <DxItem data-field="callback_params" :col-span="2" />
+          </DxItem>
+          <DxItem :col-count="1" :col-span="2" item-type="group">
+            <DxSimpleItem>
+              <template #default>
+                <div class="line"></div>
+              </template>
+            </DxSimpleItem>
+          </DxItem>
+          <DxItem :col-count="2" :col-span="2" item-type="group">
+            <DxItem data-field="need_notice" />
+            <DxItem data-field="notice_email" />
+            <DxItem data-field="notice_phone" />
+            <DxItem data-field="notice_siteemail" />
+          </DxItem>
+          <DxItem :col-count="1" :col-span="2" item-type="group">
+            <DxSimpleItem>
+              <template #default>
+                <div class="line"></div>
+              </template>
+            </DxSimpleItem>
+          </DxItem>
+          <DxItem data-field="src" />
+          <DxItem data-field="job_name" />
+          <DxItem data-field="job_desc" />
+          <DxItem data-field="job_status" />
+          <DxItem data-field="job_progress" />
+          <DxItem data-field="creation_time" />
+          <DxItem data-field="start_time" />
+          <DxItem data-field="end_time" />
+        </DxForm>
+      </DxEditing>
+
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
       <!-- <DxColumn data-field="job_name" caption="任务类型" :allow-filtering='false' /> -->
-      <DxColumn data-field="need_download" :caption="'下载'" data-type="boolean">
+      <DxColumn data-field="job_name" caption="任务名" :allow-filtering="false" width="180" />
+      <DxColumn data-field="job_desc" caption="任务描述" width="200" />
+      <DxColumn data-field="need_download" caption="下载" data-type="boolean" width="100"
+        header-cell-template="headerCellTemplate"></DxColumn>
+      <DxColumn data-field="need_callback" caption="回执" width="100" data-type="boolean"
+        header-cell-template="headerCellTemplate"></DxColumn>
+      <DxColumn data-field="need_notice" caption="通知" width="100" data-type="boolean"
+        header-cell-template="headerCellTemplate"></DxColumn>
+      <DxColumn data-field="job_status" :width="150" caption="状态" :allow-editing="false" :allow-filtering="!seeDone">
+        <DxLookup value-expr="value" display-expr="text" :data-source="!seeDone?status:status1" />
       </DxColumn>
-      <DxColumn data-field="need_callback" :caption="'回执'" data-type="boolean">
-      </DxColumn>
-      <DxColumn data-field="need_notice" :caption="'通知'" data-type="boolean" @click="console.log(1)">
-      </DxColumn>
+      <DxColumn data-field="tenant" caption="租户" :visible="false" />
       <DxColumn data-field="download_path" caption="下载地址" :visible="false" />
       <DxColumn data-field="callback_path" caption="回执地址" :visible="false" />
       <DxColumn data-field="callback_params" caption="回执参数" :visible="false" />
@@ -21,12 +82,13 @@
       <DxColumn data-field="notice_email" caption="邮件" :visible="false" />
       <DxColumn data-field="notice_phone" caption="短信" :visible="false" />
       <DxColumn data-field="src" caption="来源" />
-      <DxColumn data-field="interval" caption="任务名" :allow-filtering='false' />
-      <DxColumn data-field="description" caption="任务描述" />
       <DxColumn data-field="job_progress" caption="进度" />
-      <DxColumn data-field="creation_time" caption="任务下派时间" :allow-editing="false" format="yyyy-MM-dd HH:mm:ss" />
-      <DxColumn data-field="start_time" caption="任务开始时间" :allow-editing="false" format="yyyy-MM-dd hh:mm:ss" />
-      <DxColumn data-field="end_time" caption="任务完成时间" :allow-editing="false" format="yyyy-MM-dd hh:mm:ss" />
+      <DxColumn data-field="creation_time" caption="任务下派时间" data-type="date" :allow-editing="false"
+        format="yyyy-MM-dd HH:mm:ss" />
+      <DxColumn data-field="start_time" caption="任务开始时间" data-type="date" :allow-editing="false"
+        format="yyyy-MM-dd hh:mm:ss" />
+      <DxColumn data-field="end_time" caption="任务完成时间" data-type="date" :allow-editing="false"
+        format="yyyy-MM-dd hh:mm:ss" />
       <DxColumn data-field caption="执行记录" :allow-filtering="false" cell-template="logTemplate" />
       <DxColumn data-field caption="查看结果" :allow-filtering="false" cell-template="downloadResultTemplate" width="120" />
       <DxFilterRow :visible="true"></DxFilterRow>
@@ -41,69 +103,284 @@
         <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key)">查看
         </div>
       </template>
+      <!-- 状态结果 -->
+      <!-- <template #statusTemplate="{ data }">
+        <div class="task-a text-center" :id="'tmp' + data.key" @click="handelStatus(data.key, data.value)">
+          {{ data.text }}</div>
+      </template> -->
+      <!-- 头部标题模板 -->
+      <template #headerCellTemplate="{ data }">
+        <div class="text-center" :title="
+            data.column.name == 'need_download'
+              ? '是否需要下载'
+              : data.column.name == 'need_callback'
+                ? '是否需要回执'
+                : '是否需要通知'
+          ">
+          {{
+            data.column.name == 'need_download'
+              ? '下载'
+              : data.column.name == 'need_callback'
+                ? '回执'
+                : '通知'
+          }}
+        </div>
+      </template>
+      <template #tooolBarCheckBox>
+        <DxCheckBox v-model:value="seeDone" :width="120" text="查看已完成" />
+      </template>
     </DxDataGrid>
     <!-- 必须用v-model:visbel,否则点击多次 -->
-    <Popup :width="800" :height="300" :show-title="true" :close-on-outside-click="true"
-      v-model:visible="taskDetailVisible" position="ceter" title="任务详情">
-      <TimeTaskDetail :jodid="tpid" :type="type"></TimeTaskDetail>
+    <Popup :width="800" :height="400" :show-title="true" :close-on-outside-click="true"
+      v-model:visible="taskDetailVisible" position="center" title="日志记录">
+      <LogDetail :paramaid="tpid" type="dispatch"></LogDetail>
     </Popup>
   </div>
 </template>
-{{statusValue}}
+{{ statusValue }}
 <script>
 import {
   DxDataGrid,
   DxColumn,
+  DxLookup,
+  DxPopup,
   DxPaging,
   DxPager,
-  DxFilterRow
-} from 'devextreme-vue/data-grid'
-import { DxPopup as Popup } from 'devextreme-vue/popup'
-// import { createStore } from "devextreme-aspnet-data-nojquery"
-// // const url = "https:"
-// const dataSource = createStore({
-//   key: "jodid",
-//   loadUrl: `/time-task.json`,
-//   onBeforeSend: (method, ajaxOptions) => {
-//     ajaxOptions.xhrFields = { withCredentials: true };
-//   }
-// })
-import { data } from './time-task'
-import { ref, computed } from 'vue'
-import TimeTaskDetail from '../components/TimeTaskDetail.vue'
-var dataSource = data.data;
+  DxEditing,
+  DxForm,
+  DxFilterRow,
+} from 'devextreme-vue/data-grid';
+import { DxCheckBox } from 'devextreme-vue/check-box';
+import { DxItem, DxSimpleItem } from 'devextreme-vue/form';
+import { DxPopup as Popup } from 'devextreme-vue/popup';
+import { createStore } from "devextreme-aspnet-data-nojquery"
+import { ref, computed, onMounted, reactive, watch } from 'vue';
+import LogDetail from '../components/LogDetail.vue';
+import notify from 'devextreme/ui/notify';
+import { getCurrentInstance } from 'vue'
+// 接口
+import { updatetaskstatus } from '@/api/task'
+
 export default {
-  name: "TaskQuery",
   setup() {
-    const status = [{ value: "pending", text: "等待处理", editable: false }, { value: "inprocess", text: "处理中", editable: true }, { value: "pause", text: "暂停", editable: true }, { value: "complele", text: "任务完成", editable: false }, { value: "error", text: "异常", editable: false }]
+    const dataGrid = ref() // dataGrid 实例
+    const height = ref(0) // dataGrid 高度
+    const seeDone = ref(false)// 查看已完成
+    const status = [
+      { value: 'waiting', text: '等待处理', editable: false },
+      { value: 'progressing', text: '处理中', editable: true },
+      { value: 'suspend', text: '暂停', editable: true },
+      { value: 'abnormal', text: '异常', editable: false },
+    ];
+    const status1 = [{ value: 'end', text: '任务完成', editable: false }];
     const taskDetailVisible = ref(false);
-    const tpid = ref(0)
-    const type = ref("")
-    const statusId = ref(1)
-    const popoverVisible = ref(false)
-    const statusValue = ref("")
+    let params = reactive({ tenant: "aaa", bdate: '', edate: '', status: '' });
+    const tpid = ref(0);
+    const type = ref('');
+    const statusId = ref(1);
+    const popoverVisible = ref(false);
+    const statusValue = ref('');
+    let selData = ref(null)
+    const internalInstance = getCurrentInstance()
+    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    const url = `${$url}/api/activetask`;
+    const dataSource = ref(null)
+    LoadDataSource()
+
+    function LoadDataSource() {
+      if (!seeDone.value) {
+        dataSource.value = createStore({
+          key: "tpid",
+          loadUrl: `${url}/get`,
+          loadParams: params,
+          insertUrl: `${url}/post`,
+          updateUrl: `${url}/put`,
+          deleteUrl: `${url}/delete`,
+          onBeforeSend: (method, ajaxOptions) => {
+            ajaxOptions.xhrFields = { withCredentials: false }
+          }
+        })
+      } else {
+        dataSource.value = createStore({
+          key: "tpid",
+          loadUrl: `${url}/getdone`,
+          loadParams: params,
+        })
+      }
+    }
 
 
     const statusText = computed(() => {
-      return status.filter(item => item.editable).map(item => item.value)
+      return status.filter((item) => item.editable).map((item) => item.value);
+    });
+    watch(seeDone, () => {
+      LoadDataSource()
     })
+    // watch(() => seeDone, (newVal) => {
+    //   console.log(newVal);
+    //   if (newVal) {
+    //     dataGrid.value.instance.refresh();
+    //   }
+    // })
+    // 头部工具栏
+    function onToolbarPreparing(e) {
+      e.toolbarOptions.items.unshift(
+        {
+          location: 'before',
+          template: 'tooolBarCheckBox',
+        },
+        {
+          location: 'before',
+          widget: 'dxDateBox',
+          options: {
+            type: 'date',
+            // value: new Date(),
+            placeholder: '开始时间',
+            displayFormat: 'yyyy-MM-dd',
+            onValueChanged: function (data) {
+              params.bdate = dateFormat(data.value);
+            },
+          },
+        },
+        {
+          location: 'before',
+          widget: 'dxDateBox',
+          options: {
+            type: 'date',
+            // value: new Date(),
+            placeholder: '结束时间',
+            displayFormat: 'yyyy-MM-dd',
+            onValueChanged: function (data) {
+              params.edate = dateFormat(data.value);
+            },
+          },
+        },
+        {
+          location: 'before',
+          widget: 'dxButton',
+          options: {
+            width: 86,
+            type: 'default',
+            icon: 'search',
+            text: '查询',
+            onClick: () => {
+              refreshDataGrid();
+              console.log(params);
+            },
+          },
+        }
+      );
+    }
+    onMounted(
+      window.onresize = () => {
+        height.value = window.innerHeight - 150
+      })
 
-    const toggleTaskDetailVisble = function (key, value) {
-      tpid.value = key
-      type.value = value
+    function dateFormat(date) {
+      return (
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      );
+    }
+    // 根据下拉选择刷新dataGrid
+    function refreshDataGrid() {
+      // dataSource.value = []
+      dataGrid.value.instance.refresh();
+    }
+    // function radioTemplate(itemData, _, itemElement) {
+    //   itemElement.innerText = status.filter(
+    //     (item) => item.value == itemData
+    //   )[0].text;
+    // }
+    function toggleTaskDetailVisble(key, value) {
+      tpid.value = key;
+      type.value = value;
       console.log(value);
-      taskDetailVisible.value = !taskDetailVisible.value
+      taskDetailVisible.value = !taskDetailVisible.value;
     }
 
-    const handelStatus = function (key, value) {
-      statusId.value = key
-      statusValue.value = value
-      popoverVisible.value = true
+
+    function handelStatus(type) {
+      console.log(selData);
+      let fn = updatetaskstatus
+      if (!selData.value.tpid) {
+        return notify({
+          message: "请先选中后一条数据后再操作",
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'error', 2000);
+      }
+      if ((type === "progressing" && ["suspend", "waiting"].indexOf(selData.value.job_status) < 0)) {
+        return notify({
+          message: "非暂停和等待处理不可执行恢复操作",
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'error', 2000);
+      }
+      if (type === "suspend" && selData.value.job_status !== 'progressing') {
+        return notify({
+          message: "非处理中不可执行暂停操作",
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'error', 2000);
+      }
+      var formData = new FormData()
+      formData.append("key", selData.value.tpid)
+      formData.append("values", type)
+      fn(formData).then((res) => {
+        notify({
+          message: res.message,
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'success', 2000);
+        dataGrid.value.instance.refresh()
+      }).catch(error => {
+        notify({
+          message: error.message,
+          position: {
+            my: 'center center',
+            at: 'center center'
+          },
+          width: 200
+        }, 'error', 2000);
+      })
+    }
+
+
+    function handelRadioChange(e) {
+      console.log(e.value);
+      popoverVisible.value = false;
+    }
+    function onContentReady() {
+      document.querySelector(
+        '.dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit'
+      ).innerText = '操作';
+      document.querySelector('.dx-freespace-row').style.height = 0;
+    }
+
+    function onSelectionChanged({ selectedRowsData }) {
+      console.log(selectedRowsData);
+      selData.value = selectedRowsData[0];
     }
 
     return {
+      dataGrid,
+      height,
+      seeDone,
       dataSource,
       status,
+      status1,
       tpid,
       type,
       statusId,
@@ -112,25 +389,47 @@ export default {
       popoverVisible,
       statusText,
       statusValue,
+      selData,
 
+
+      refreshDataGrid,
       toggleTaskDetailVisble,
+      onToolbarPreparing,
       handelStatus,
-      // onSelectionChanged,
-    }
+      handelRadioChange,
+      onContentReady,
+      onSelectionChanged,
+    };
   },
   components: {
     DxDataGrid,
+    DxPopup,
+    DxEditing,
     DxColumn,
+    DxLookup,
     DxPaging,
     DxPager,
+    DxItem,
+    DxSimpleItem,
+    DxForm,
+    DxCheckBox,
     Popup,
     DxFilterRow,
-    TimeTaskDetail
-  }
-}
+    LogDetail,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+.task-a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.dx-row-focused {
+  .task-a {
+    color: #fff;
+  }
+}
 .dx-item .line {
   height: 1px;
   background: #ddd;
@@ -138,4 +437,8 @@ export default {
 .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
   width: 75%;
 }
-</style>>
+.text-center {
+  min-width: 80px;
+}
+</style
+>>

@@ -12,10 +12,10 @@ export default [
         text: "Profile",
         path: "/profile"
       },
-      // {
-      //   text: "TaskExample",
-      //   path: "/tasks/example"
-      // },
+      {
+        text: "TaskExample",
+        path: "/tasks/example"
+      },
       {
         text: "定时任务",
         path: "/tasks/task-time"

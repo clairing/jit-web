@@ -3,10 +3,11 @@
   <div>
     <div>
       <DxDataGrid :data-source="dataSource" :height="500" key-expr="id" @toolbar-preparing="onToolbarPreparing($event)"
-        :show-column-lines="true" :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true"
-        :focused-row-enabled="true" :column-auto-width="true" :column-hiding-enabled="false"
-        :repaint-changes-only="true" @editing-start="editingStart" :grouping="{ autoExpandAll: true }"
-        :group-panel="{ visible: false }" @content-ready="onContentReady" :scrolling="{
+        ref="dataGrid" :show-column-lines="true" :show-row-lines="true" :show-borders="true"
+        :row-alternation-enabled="true" :focused-row-enabled="true" :column-auto-width="true"
+        :column-hiding-enabled="false" :repaint-changes-only="true" @editing-start="editingStart"
+        :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" @content-ready="onContentReady"
+        :scrolling="{
           showScrollbar: 'always',
           useNative: false
         }" :column-resizing-mode="'widget'">
@@ -97,6 +98,7 @@ export default {
     const type = ref("")
     const typeText = ref("")
     const childVisible = ref(false)
+    const dataGrid = ref()
     let tempData = reactive({
       tenantDataVisible: false,
       cid: 0
@@ -133,6 +135,7 @@ export default {
       document.querySelector(".dx-freespace-row").style.height = 0
     }
     return {
+      dataGrid,
       dataSource,
       logvisible,
       childVisible,

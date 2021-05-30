@@ -1,9 +1,9 @@
 
 <template>
   <div>
-    <DxTreeList id="tasks" :data-source="dataSource" @content-ready="onContentReady"
+    <DxTreeList id="tasks" :data-source="dataSource" @content-ready="onContentReady" ref="dxTreeList"
       @editor-preparing="onEditorPreparing" @init-new-row="onInitNewRow" @cell-prepared="onCellPrepared"
-      :show-borders="true" :height="500" :column-auto-width="true" :word-wrap-enabled="true" key-expr="id"
+      :show-borders="true" :height="500" :column-auto-width="true" :word-wrap-enabled="true" key-expr="dgid"
       parent-id-expr="parent_id" :show-column-lines="true" :show-row-lines="true" :selection="{ mode: 'none' }"
       :data-structure="'plain'" :row-alternation-enabled="true" :scrolling="{ mode: 'standard' }"
       :auto-expand-all="true">
@@ -15,15 +15,16 @@
 
       <DxColumn :width="120" data-field="tenant_name" caption="租户" />
       <DxColumn :width="200" data-field="org_name" caption="组织" />
-      <DxColumn :width="140" data-field="mark" caption="识别标记" />
+      <DxColumn :width="140" data-field="identify_mark" caption="识别标记" />
       <DxColumn :min-width="120" data-field="service_type" caption="服务类型">
         <DxLookup :data-source="use_types" value-expr="value" display-expr="text" />
       </DxColumn>
-      <DxColumn data-field="expense_type" caption="收费类型">
+      <DxColumn data-field="charge_type" caption="收费类型">
         <DxLookup :data-source="expense_types" value-expr="value" display-expr="text" />
       </DxColumn>
-      <DxColumn data-field="expire_time" caption="到期时间" />
-      <DxColumn data-field="count" caption="次数" />
+      <DxColumn data-field="expire_time" caption="到期时间" dataType="datetime" format="yyyy-MM-dd HH:mm:dd" />
+      <DxColumn data-field="charge_count" caption="次数" />
+      <!-- <DxColumn data-field="expire_date_surcount" caption="时间收费剩余次数" /> -->
       <DxColumn data-field="status" caption="启用" cell-template="statusTemplate" />
 
       <DxColumn data-field caption="日志" width="120" cell-template="logTemplate" />
@@ -61,22 +62,50 @@ import {
 import DxSwitch from 'devextreme-vue/switch'
 import { DxPopup } from 'devextreme-vue/popup'
 import LogDetail from '@/views/service/components/LogDetail.vue'
-import { ref } from "vue"
-import { tasks } from './data.js'
-const use_types = [{ value: "synchronous", text: "先用后付" }, { value: "request", text: "先付后用" }]
-const expense_types = [{ value: "synchronous", text: "时间收费" }, { value: "request", text: "次数收费" }]
-import { nextTick } from 'vue'
+import { ref, getCurrentInstance, watch, reactive, nextTick } from "vue"
 import { useRouter } from 'vue-router';
+import { createStore } from "devextreme-aspnet-data-nojquery"
+
+const use_types = [{ value: "先用后付", text: "先用后付" }, { value: "先付后用", text: "先付后用" }]
+const expense_types = [{ value: "按时间收费", text: "按时间收费" }, { value: "按次数收费", text: "按次数收费" }]
 export default {
   props: {
-    cid: {
+    dsid: {
       type: Number,
       default: 0
     }
   },
   setup(props, { emit }) {
+    // TreeList 实例
+    const dxTreeList = ref()
     const router = useRouter();
     const logVisible = ref(false)
+    const params = reactive({ "dsCode": "" })
+
+    const dataSource = ref(null)
+    const internalInstance = getCurrentInstance()
+    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    const url = `${$url}/api/grantrecord`;
+    watch(() => props.dsid, (newVal, oldVal) => {
+      params.dsCode = newVal || oldVal
+      LoadDataSource()
+    })
+    function LoadDataSource() {
+      dataSource.value = createStore({
+        key: "dgid",
+        loadUrl: `${url}/get`,
+        loadParams: params,
+        insertUrl: `${url}/post`,
+        updateUrl: `${url}/put`,
+        deleteUrl: `${url}/delete`,
+        onBeforeSend: (method, ajaxOptions) => {
+          ajaxOptions.xhrFields = { withCredentials: false }
+        }, onInserting(data) {
+          data.ds_code = props.dsid// 新增之前,添加关联主键
+        }
+      })
+      console.log(params);
+    }
     //1、要解决问题的：父元素的id为O，则编辑添加的时候，禁用某些cell, 
     //2、子级去掉新增
     function onCellPrepared(e) {
@@ -134,7 +163,8 @@ export default {
       router.push({ name: "ServiceOrgService", params: { org_id: column.data.org_id } })
     }
     return {
-      dataSource: tasks,
+      dxTreeList,
+      dataSource,
       use_types,
       expense_types,
       logVisible,

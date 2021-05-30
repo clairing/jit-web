@@ -1,10 +1,13 @@
 <template>
   <div id="root">
     <div :class="cssClasses">
-      <component :is="$route.meta.layout" :title="title" :is-x-small="screen.getScreenSizeInfo.isXSmall"
-        :is-large="screen.getScreenSizeInfo.isLarge">
+      <component
+        :is="$route.meta.layout"
+        :title="title"
+        :is-x-small="screen.getScreenSizeInfo.isXSmall"
+        :is-large="screen.getScreenSizeInfo.isLarge"
+      >
         <div class="content">
-
           <!-- <router-view></router-view> -->
           <router-view v-slot="{ Component }">
             <transition>
@@ -14,9 +17,9 @@
             </transition>
           </router-view>
         </div>
-        <template #footer>
+        <!-- <template #footer>
           <app-footer />
-        </template>
+        </template>-->
       </component>
     </div>
   </div>
@@ -25,6 +28,8 @@
 <script>
 import AppFooter from "./components/app-footer";
 import { sizes, subscribe, unsubscribe } from "./utils/media-query";
+import zhMessages from "devextreme/localization/messages/zh.json";
+import { locale, loadMessages } from "devextreme/localization";
 import {
   getCurrentInstance,
   reactive,
@@ -48,8 +53,11 @@ export default {
     AppFooter
   },
   setup() {
-    const vm = getCurrentInstance();
+    // 使用中文
+    loadMessages(zhMessages);
+    locale(navigator.language);
 
+    const vm = getCurrentInstance();
     const title = vm.proxy.$appInfo.title;
     const screen = reactive({ getScreenSizeInfo: {} });
     screen.getScreenSizeInfo = getScreenSizeInfo();
@@ -98,7 +106,7 @@ body {
   // margin: 20px;
 }
 .app {
-  @import './themes/generated/variables.base.scss';
+  @import "./themes/generated/variables.base.scss";
   background-color: darken($base-bg, 5);
   display: flex;
   height: 100%;

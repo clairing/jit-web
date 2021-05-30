@@ -1,7 +1,7 @@
 <template>
-  <MainServer :canEditing="true" @emitData="emitData" />
-  <DxPopup v-model:visible="tempData.chVisible" title="日志记录" :show-title="true">
-    <SubServer :type="tempData.type" :cid="tempData.cid" />
+  <MainServer :canEditing="true" @emitData="emitData" :reload="false" />
+  <DxPopup v-model:visible="tempData.chVisible" title="子服务" :show-title="true">
+    <SubServer :ds_type="tempData.ds_type" :dsid="tempData.dsid" />
   </DxPopup>
 </template>
 
@@ -17,8 +17,8 @@ export default {
   setup() {
     let tempData = reactive({
       chVisible: false,
-      cid: 0,
-      type: 0
+      dsid: "",
+      ds_type: ""
     })
     function emitData(data) {
       Object.assign(tempData, data)

@@ -1,9 +1,9 @@
 
 <!-- 数据服务企业配置 -->
 <template>
-  <MainServer @emitData="emitData"></MainServer>
+  <MainServer @emitData="emitData" :reload="true"></MainServer>
   <DxPopup v-model:visible="tempData.chVisible" :show-title="true" title="数据服务-租户">
-    <TenantData :cid="tempData.cid" @emitData="emitData" />
+    <TenantData :dsid="tempData.dsid" @emitData="emitData" />
   </DxPopup>
   <!-- <OrgData :cid="tempData.org_id"></OrgData> -->
 </template>
@@ -19,10 +19,11 @@ export default {
   setup() {
     let tempData = reactive({
       chVisible: false,
-      cid: 0,
-      org_id: 0
+      dsid: "",
+      ds_type: ""
     })
     function emitData(data) {
+      console.log(data);
       Object.assign(tempData, data);
     }
     return {

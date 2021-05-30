@@ -1,69 +1,62 @@
 <template>
   <div>
-    <dx-data-grid
-      class="dx-card wide-card"
-      :data-source="dataSourceConfig"
-      :focused-row-index="0"
-      :show-borders="false"
-      :focused-row-enabled="true"
-      :column-auto-width="true"
-      :column-hiding-enabled="true"
-    >
-      <dx-paging :page-size="10" />
-      <dx-pager :show-page-size-selector="true" :show-info="true" />
-      <dx-filter-row :visible="true" />
+    <data-grid class="dx-card wide-card" :data-source="dataSourceConfig" :page-size="6">
+      <!-- <dx-paging :page-size="10" />
+      <dx-pager :show-page-size-selector="true" :show-info="true" />-->
+      <!-- <dx-filter-row :visible="true" /> -->
+      <template #main>
+        <dx-column data-field="Task_ID" :width="90" :hiding-priority="2" />
 
-      <dx-column data-field="Task_ID" :width="90" :hiding-priority="2" />
+        <dx-column
+          data-field="Subject"
+          caption="任务"
+          :width="190"
+          :hiding-priority="8"
+          :allow-filtering="true"
+        />
 
-      <dx-column data-field="Task_Subject" caption="Subject" :width="190" :hiding-priority="8" />
+        <dx-column data-field="Task_Status" caption="Status" :hiding-priority="6" />
 
-      <dx-column data-field="Task_Status" caption="Status" :hiding-priority="6" />
+        <dx-column data-field="Task_Priority" caption="Priority" :hiding-priority="5">
+          <dx-lookup display-expr="name" value-expr="value" :data-source="priorities" />
+        </dx-column>
 
-      <dx-column data-field="Task_Priority" caption="Priority" :hiding-priority="5">
-        <dx-lookup display-expr="name" value-expr="value" :data-source="priorities" />
-      </dx-column>
+        <dx-column
+          data-field="ResponsibleEmployee.Employee_Full_Name"
+          caption="Assigned To"
+          :allow-sorting="false"
+          :hiding-priority="7"
+        />
 
-      <dx-column
-        data-field="ResponsibleEmployee.Employee_Full_Name"
-        caption="Assigned To"
-        :allow-sorting="false"
-        :hiding-priority="7"
-      />
+        <dx-column
+          data-field="Task_Start_Date"
+          caption="Start Date"
+          data-type="date"
+          :hiding-priority="3"
+        />
 
-      <dx-column
-        data-field="Task_Start_Date"
-        caption="Start Date"
-        data-type="date"
-        :hiding-priority="3"
-      />
+        <dx-column data-field="Task_Due_Date" caption="日期" data-type="date" :hiding-priority="4" />
 
-      <dx-column
-        data-field="Task_Due_Date"
-        caption="Due Date"
-        data-type="date"
-        :hiding-priority="4"
-      />
+        <dx-column
+          data-field="Task_Priority"
+          caption="Priority"
+          name="Priority"
+          :hiding-priority="1"
+        />
 
-      <dx-column
-        data-field="Task_Priority"
-        caption="Priority"
-        name="Priority"
-        :hiding-priority="1"
-      />
-
-      <dx-column data-field="Task_Completion" caption="Completion" :hiding-priority="0" />
-    </dx-data-grid>
+        <dx-column data-field="Task_Completion" caption="Completion" :hiding-priority="0" />
+      </template>
+    </data-grid>
   </div>
 </template>
 
 <script>
 import "devextreme/data/odata/store";
-import DxDataGrid, {
+import DataGrid from '@/components/dev/DxDataGrid.vue'
+import {
   DxColumn,
-  DxFilterRow,
   DxLookup,
-  DxPager,
-  DxPaging
+
 } from "devextreme-vue/data-grid";
 
 const priorities = [
@@ -100,12 +93,12 @@ export default {
     };
   },
   components: {
-    DxDataGrid,
+    DataGrid,
     DxColumn,
-    DxFilterRow,
+    // DxFilterRow,
     DxLookup,
-    DxPager,
-    DxPaging
+    // DxPager,
+    // DxPaging
   }
 };
 </script>

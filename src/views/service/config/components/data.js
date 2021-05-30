@@ -1,16 +1,15 @@
 
 export const tasks = [{
-  'id': 1,
+  'id': "SSSS",
   'tenant_name': '租户1',
   'org_name': '组织一',
   'expire_time': '2015-04-01T00:00:00',
   'count': 11,
   'mark': 4,
   'enabled': 100,
-  'service_type': '11111111',
-  'expense_type': '1111111111',
+  'service_type': '请求',
+  'expense_type': '按时间收费',
   'org_id': '1',
-  'parent_id': 0,
 }, {
   'id': 2,
   'tenant_name': 'Plans 2015',
@@ -22,7 +21,7 @@ export const tasks = [{
   'service_type': '11111111',
   'expense_type': '1111111111',
   'org_id': '2',
-  'parent_id': 0
+
 }, {
   'id': 3,
   'tenant_name': '',
@@ -34,6 +33,5 @@ export const tasks = [{
   'service_type': '11111111',
   'expense_type': '1111111111',
   'org_id': '3',
-  'parent_id': 1
 }
 ]

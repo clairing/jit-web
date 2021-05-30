@@ -1,25 +1,42 @@
 <template>
   <div>
-    <DxDataGrid :show-border="true" :data-source="dataSource" :height=300 key-expr="drid" :show-column-lines="true"
-      :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true" :column-auto-width="true"
-      :column-hiding-enabled="false" :column-fixing="{ enabled: true }" :repaint-changes-only="true"
-      :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
+    <DxDataGrid
+      :show-border="true"
+      :data-source="dataSource"
+      :height="300"
+      key-expr="rid"
+      :show-column-lines="true"
+      :show-row-lines="true"
+      :show-borders="true"
+      :row-alternation-enabled="true"
+      :column-auto-width="true"
+      :column-hiding-enabled="false"
+      :column-fixing="{ enabled: true }"
+      :repaint-changes-only="true"
+      @toolbar-preparing="onToolbarPreparing"
+      @content-ready="onContentReady"
+      @editing-start="editingStart"
+      :grouping="{ autoExpandAll: true }"
+      :group-panel="{ visible: false }"
+      :scrolling="{
         showScrollbar: 'always',
         useNative: false
-      }" :column-resizing-mode="'widget'">
+      }"
+      :column-resizing-mode="'widget'"
+    >
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
-      <DxColumn data-field="dc_code" caption="执行时间"></DxColumn>
-      <DxColumn data-field="dc_type" caption="收费类型"></DxColumn>
-      <DxColumn data-field="invoked_time" caption="调用时间"></DxColumn>
-      <DxColumn data-field="status" caption="状态"></DxColumn>
+      <DxColumn data-field="creation_time" caption="执行时间"></DxColumn>
+      <DxColumn data-field="end_time" caption="结束时间"></DxColumn>
+      <DxColumn data-field="note" caption="备注"></DxColumn>
+      <DxColumn data-field="result" caption="结果" :visible="type == 'dispatch'"></DxColumn>
     </DxDataGrid>
   </div>
-</template>
+</template>s
 
 <script>
+import DxDataGrid from '@/components/dev/DxDataGrid.vue'
 import {
-  DxDataGrid,
   DxColumn,
   DxPaging,
   DxPager
@@ -34,23 +51,22 @@ export default {
       type: String,
       default: ""
     },
-    // 日志类型 type:"main": 主任务  dispatch :"子任务"
+    // 日志类型 type:"time": 定时任务  dispatch :"派发任务"
     type: {
       type: String,
       default: ""
     }
   },
   setup(props) {
-    // console.log(props);
-    const params = reactive({ paramaid: props.paramaid })
+    const params = reactive({ paramaid: "" })
     const dataSource = ref(null)
     // 获取当前vue实例
     const internalInstance = getCurrentInstance()
     let $http = internalInstance.appContext.config.globalProperties.$appInfo.$http
     let apiUrl = ""
     switch (props.type) {
-      case "main":
-        apiUrl = `${$http}/api/masterservice`;
+      case "time":
+        apiUrl = `${$http}/api/timedtask`;
         break
       case "dispatch":
         apiUrl = `${$http}/api/activetask`;
@@ -65,8 +81,8 @@ export default {
     })
     function loadLogs() {
       dataSource.value = createStore({
-        key: "drid",
-        loadUrl: `${apiUrl}/invokedrecord`,
+        key: "rid",
+        loadUrl: `${apiUrl}/gettaskrecord`,
         loadParams: params,
         onBeforeSend: (method, ajaxOptions) => {
           ajaxOptions.xhrFields = { withCredentials: false }
