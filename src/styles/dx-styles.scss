@@ -128,5 +128,9 @@ $side-panel-min-width: 60px;
   .dx-field-item-label
   .dx-field-item-label-content {
   display: block;
-  width: 60px !important;
+  min-width: 60px !important;
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon::before {
+  content: '';
 }

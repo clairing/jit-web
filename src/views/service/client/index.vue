@@ -71,8 +71,8 @@ export default {
       typeText.value =
         types.filter((item) => item.value == newVal)[0]?.text ?? '';
     });
-    const internalInstance = getCurrentInstance()
-    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    const { proxy } = getCurrentInstance()
+    let $url = proxy.$appInfo.apiUrl
     const url = `${$url}/api/clientinfo`;
     LoadDataSource()
 

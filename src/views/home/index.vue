@@ -110,11 +110,48 @@
 // import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from "vuex";
+// import { getCurrentInstance } from 'vue'
+
 export default {
   setup() {
-    console.log(useStore().getters);
+    // var { ctx } = getCurrentInstance()
+    // ctx.$confirm("<i>Are you sure?</i>", "Confirm changes");
+    // ctx.$custom({
+    //   title: "Custom dialog",
+    //   messageHtml: "<b>Dialog with custom buttons</b>",
+    //   showCloseButton: false,
+    //   ignoreChildEvents: true,
+    //   buttons: [{
+    //     text: "button 1",
+    //     onClick: (e) => {
+    //       return { buttonText: e.component.option("text") }
+    //     }
+    //   },
+    //     // ...
+    //   ],
+    //   onContentReady: function (e) {
+    //     console.log(e);
+    //   }
+    // }).show();
+    console.log(useStore());
     console.log(useRouter);
     console.log(useRoute);
+
+    // let myDialog = ctx.$custom({
+    //   title: "Custom dialog",
+    //   messageHtml: "<b>Dialog with custom buttons</b>",
+    //   buttons: [{
+    //     text: "button 1",
+    //     onClick: (e) => {
+    //       return { buttonText: e.component.option("text") }
+    //     }
+    //   },
+    //     // ...
+    //   ]
+    // });
+    // myDialog.show().then((dialogResult) => {
+    //   console.log(dialogResult.buttonText);
+    // });
     // console.log(process.env);
   },
 }

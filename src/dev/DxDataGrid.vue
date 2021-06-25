@@ -1,32 +1,18 @@
 <template>
   <div>
-    <DxDataGrid
-      v-bind="$attrs"
-      :height="height"
-      :show-column-lines="true"
-      :show-row-lines="true"
-      :show-borders="true"
-      :row-alternation-enabled="true"
-      :focused-row-enabled="false"
-      :column-auto-width="true"
-      :column-hiding-enabled="false"
-      :column-fixing="{ enabled: true }"
-      :repaint-changes-only="true"
-      :grouping="{ autoExpandAll: true }"
-      :group-panel="{ visible: false }"
-      :scrolling="{
+    <DxDataGrid v-bind="$attrs" :height="height" :show-column-lines="true" :show-row-lines="true" :show-borders="true"
+      :row-alternation-enabled="true" :focused-row-enabled="false" :column-auto-width="true"
+      :column-hiding-enabled="false" :column-fixing="{ enabled: true }" :repaint-changes-only="true"
+      :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
         showScrollbar: 'always',
         useNative: false
-      }"
-      :column-resizing-mode="'widget'"
-      :selection="{ mode: 'single' }"
-    >
-      <template #default>
-        <DxPaging :page-size="pageSize" />
-        <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
-        <DxFilterRow :visible="true"></DxFilterRow>
-        <slot></slot>
-      </template>
+      }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }">
+
+      <DxPaging :page-size="pageSize" />
+      <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
+      <DxFilterRow :visible="true"></DxFilterRow>
+      <slot></slot>
+
     </DxDataGrid>
   </div>
 </template>
@@ -55,7 +41,7 @@ export default {
       // document.querySelector(".dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit").innerText = "操作"
     }
     onMounted(
-      window.onresize = function() {
+      window.onresize = function () {
         height.value = window.innerHeight - 150
       }
     )

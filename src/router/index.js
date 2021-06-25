@@ -211,7 +211,7 @@ const router = initRouter()
 
 
 // notify("Warning message", "warning", 500);`
-const whiteList = ['/login', './create-account', '/reset-password', "/reset-password", "/tasks/task-time"];
+const whiteList = ['/login', './create-account', '/reset-password', "/reset-password", "/tasks/task-time", '/tasks/task-query2'];
 router.beforeEach(async (to, from, next) => {
   // console.log(to);
   const hasToken = getToken()

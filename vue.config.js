@@ -37,5 +37,10 @@ module.exports = {
         '@': resolve('src')
       }
     }
+  },
+  chainWebpack: config => {
+    config.resolve.extensions
+      .add('ts')
+      .add('tsx');
   }
 };

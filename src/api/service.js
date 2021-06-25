@@ -18,6 +18,13 @@ export function subOperate(data) {
   })
 }
 
+//租户级别 启动暂停
+export function tOperate(data) {
+  return request({
+    url: url + "grantrecord/operate/" + data.type + '/' + data.id,
+    method: "post",
+  })
+}
 
 
 

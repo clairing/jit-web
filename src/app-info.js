@@ -1,4 +1,4 @@
 export default {
   title: "轻量级应用",
-  $http: "http://192.168.1.106:8050"
+  apiUrl: "http://139.196.6.92:8050"
 };

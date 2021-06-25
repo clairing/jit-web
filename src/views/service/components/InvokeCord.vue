@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DxDataGrid :show-border="true" :data-source="dataSource" :height="300" key-expr="rid" :show-column-lines="true"
+    <DxDataGrid :show-border="true" :data-source="dataSource" :height=300 key-expr="drid" :show-column-lines="true"
       :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true" :column-auto-width="true"
       :column-hiding-enabled="false" :column-fixing="{ enabled: true }" :repaint-changes-only="true"
       :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
@@ -9,13 +9,16 @@
       }" :column-resizing-mode="'widget'">
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
-      <DxColumn data-field="creation_time" caption="执行时间"></DxColumn>
-      <DxColumn data-field="end_time" caption="结束时间"></DxColumn>
-      <DxColumn data-field="note" caption="备注"></DxColumn>
-      <DxColumn data-field="result" caption="结果" :visible="type == 'dispatch'"></DxColumn>
+      <DxColumn data-field="invoked_time" caption="调用时间"></DxColumn>
+      <DxColumn data-field="ds_code" caption="主服务编码" :width="120" />
+      <DxColumn data-field="tenant_id" caption="编码" :width="100" />
+      <DxColumn data-field="org_id" caption="企业" :width="120" />
+      <DxColumn data-field="dm_code" caption="企业服务编码"></DxColumn>
+      <DxColumn data-field="status" caption="状态"></DxColumn>
+      <DxColumn data-field="message" caption="消息"></DxColumn>
     </DxDataGrid>
   </div>
-</template>s
+</template>
 
 <script>
 import {
@@ -31,49 +34,40 @@ export default {
   props: {
     // 传递的参数
     paramaid: {
-      type: String,
-      default: "73239085be4a4138aa88b7326378bb0a"
+      type: Number,
+      default: 0
     },
-    // 日志类型 type:"time": 定时任务  dispatch :"派发任务"
-    type: {
+    // 日志类型 type:"service": 主任务  grant :"开通记录" grant:'机构租户'
+    operate: {
       type: String,
-      default: "time"
+      default: ""
+    },
+    tenant_id: {
+      type: Number,
+      default: 0
     }
   },
   setup(props) {
-    console.log(props.paramaid, props.type);
-    const params = reactive({ paramaid: "" })
+    const params = reactive({ paramaid: props.paramaid, tenant: props.tenant_id, operate: props.operate })
     const dataSource = ref(null)
     // 获取当前vue实例
-    const { proxy } = getCurrentInstance()
-    let $url = proxy.$appInfo.apiUrl
-    let apiUrl = ""
-    switch (props.type) {
-      case "time":
-        apiUrl = `${$url}/api/timedtask`;
-        break
-      case "dispatch":
-        apiUrl = `${$url}/api/activetask`;
-        break
-      default:
-        apiUrl = ""
-        break
-    }
+    const { ctx } = getCurrentInstance()
+    let apiUrl = ctx.$appInfo.apiUrl
+    const url = `${apiUrl}/api/grantrecord/getgrants`;
     watch(() => props.paramaid, (newVal, oldVal) => {
       params.paramaid = newVal || oldVal
+      params.tenant = props.tenant_id
       loadLogs()
     })
     function loadLogs() {
+      console.log(params);
       dataSource.value = createStore({
-        key: "rid",
-        loadUrl: `${apiUrl}/gettaskrecord`,
+        key: "dgid",
+        loadUrl: `${url}`,
         loadParams: params,
         onBeforeSend: (method, ajaxOptions) => {
           ajaxOptions.xhrFields = { withCredentials: false }
-        },
-        // onLoaded(res) {
-        //   console.log(res);
-        // }
+        }
       })
     }
     return {

@@ -1,12 +1,8 @@
 <template>
   <div id="root">
     <div :class="cssClasses">
-      <component
-        :is="$route.meta.layout"
-        :title="title"
-        :is-x-small="screen.getScreenSizeInfo.isXSmall"
-        :is-large="screen.getScreenSizeInfo.isLarge"
-      >
+      <component :is="$route.meta.layout" :title="title" :is-x-small="screen.getScreenSizeInfo.isXSmall"
+        :is-large="screen.getScreenSizeInfo.isLarge">
         <div class="content">
           <!-- <router-view></router-view> -->
           <router-view v-slot="{ Component }">
@@ -59,7 +55,7 @@ export default {
 
     const vm = getCurrentInstance();
     const title = vm.proxy.$appInfo.title;
-    const screen = reactive({ getScreenSizeInfo: {} });
+    const screen = reactive({ getScreenSizeInfo: { "isLarge": "", "isXSmall": "" } });
     screen.getScreenSizeInfo = getScreenSizeInfo();
 
     function screenSizeChanged() {
@@ -106,7 +102,7 @@ body {
   // margin: 20px;
 }
 .app {
-  @import "./themes/generated/variables.base.scss";
+  @import './themes/generated/variables.base.scss';
   background-color: darken($base-bg, 5);
   display: flex;
   height: 100%;

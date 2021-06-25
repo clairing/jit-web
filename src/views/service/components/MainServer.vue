@@ -34,7 +34,7 @@
         <DxColumn data-field="status" caption="状态" cell-template="statusTemplate" :width="140" />
         <DxColumn data-field="description" caption="描述" />
         <DxColumn data-field caption="详情" width="120" cell-template="detailTemplate" />
-        <DxColumn data-field caption=" 日志" width="120" cell-template="logTemplate" :visible="canEditing" />
+        <!-- <DxColumn data-field caption=" 日志" width="120" cell-template="logTemplate" :visible="canEditing" /> -->
         <template #statusTemplate="{ data }">
           <DxSwitch v-model:value="data.value" switched-off-text="停用" switched-on-text="启用" width="80px"
             @value-changed="handelSwitchChange(data.key, data.value)" :disabled="!canEditing" />
@@ -44,9 +44,9 @@
           <a class="command-a" @click="showDetailData(data)">查看</a>
         </template>
 
-        <template #logTemplate="{ data }">
+        <!-- <template #logTemplate="{ data }">
           <a class="command-a" @click="showLogData(data.data)">查看</a>
-        </template>
+        </template> -->
 
         <template #tooolBarTemplate>
           <div class="informer">
@@ -93,7 +93,7 @@ export default {
     const paramaid = ref("")
     const typeText = ref("")
     const internalInstance = getCurrentInstance()
-    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    let $url = internalInstance.appContext.config.globalProperties.$appInfo.apiUrl
     const url = `${$url}/api/masterservice`;
     const dataSource = ref(null)
     const height = ref(0)
@@ -156,7 +156,7 @@ export default {
     //显示日志信息
     function showLogData(data) {
       logVisible.value = true
-      paramaid.value = data.ds_code
+      paramaid.value = data.dm_code
     }
     // 展示子服务
     function showDetailData(data) {

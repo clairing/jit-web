@@ -1,52 +1,24 @@
 <!-- 定时任务  -->
 <template>
   <div>
-    <DxDataGrid
-      ref="dataGrid"
-      :data-source="dataSource"
-      :height="height"
-      key-expr="jodid"
-      :show-column-lines="true"
-      :show-row-lines="true"
-      :show-borders="true"
-      :row-alternation-enabled="true"
-      :focused-row-enabled="false"
-      :column-auto-width="true"
-      :column-hiding-enabled="false"
-      :column-fixing="{ enabled: true }"
-      :allow-column-resizing="true"
-      :allow-column-reordering="true"
-      @toolbar-preparing="onToolbarPreparing"
-      @content-ready="onContentReady"
-      @editing-start="editingStart"
-      @row-dbl-click="onRowDblClick"
-      :grouping="{ autoExpandAll: true }"
-      :group-panel="{ visible: false }"
-      :scrolling="{
+    <DxDataGrid ref="dataGrid" :data-source="dataSource" :height="height" key-expr="jodid" :show-column-lines="true"
+      :show-row-lines="true" :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="false"
+      :column-auto-width="true" :column-hiding-enabled="false" :column-fixing="{ enabled: true }"
+      :allow-column-resizing="true" :allow-column-reordering="true" @toolbar-preparing="onToolbarPreparing"
+      @content-ready="onContentReady" @editing-start="editingStart" @row-dbl-click="onRowDblClick"
+      :grouping="{ autoExpandAll: true }" :group-panel="{ visible: false }" :scrolling="{
         showScrollbar: 'always',
         useNative: false
-      }"
-      :export="{
+      }" :export="{
         enabled: true,
         fileName: 'FileName',
         allowExportSelectedData: true
-      }"
-      :column-resizing-mode="'widget'"
-      :selection="{ mode: 'single' }"
-      @selection-changed="onSelectionChanged"
-    >
+      }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }" @selection-changed="onSelectionChanged">
       <!-- :repaint-changes-only="true" -->
 
       <DxPaging :page-size="10" />
-      <DxEditing
-        mode="popup"
-        :allow-adding="true"
-        :allow-deleting="true"
-        :allow-updating="true"
-        :start-edit-action="'dbClick'"
-        v-model:changes="changes"
-        :select-text-on-edit-start="true"
-      >
+      <DxEditing mode="popup" :allow-adding="true" :allow-deleting="true" :allow-updating="true"
+        :start-edit-action="'dbClick'" v-model:changes="changes" :select-text-on-edit-start="true">
         <DxPopup :show-title="true" :width="800" :height="675" :title="'定时任务信息'" />
         <DxForm>
           <DxItem data-field="tenant" :col-span="2" />
@@ -59,35 +31,20 @@
             <DxItem data-field="interval" />
             <DxSimpleItem>
               <template #default>
-                <a
-                  href="http://www.html580.com/tool/quartz/index.html"
-                  target="_blank"
-                  style="vertical-align: -webkit-baseline-middle;"
-                >参考地址</a>
+                <a href="http://www.html580.com/tool/quartz/index.html" target="_blank"
+                  style="vertical-align: -webkit-baseline-middle;">参考地址</a>
               </template>
             </DxSimpleItem>
           </DxItem>
           <DxItem :col-span="2" :col-count="2" data-field="description" />
           <DxItem data-field="task_way" :col-span="2" />
-          <DxItem
-            :col-count="1"
-            :col-span="2"
-            item-type="group"
-            :visible="tempType == 'local'"
-            caption="本地任务详情"
-          >
+          <DxItem :col-count="1" :col-span="2" item-type="group" :visible="tempType == 'local'" caption="本地任务详情">
             <DxItem data-field="task_ways.local_type" :col-span="2" />
             <DxItem data-field="task_ways.description" />
             <DxItem data-field="task_ways.local_path" :col-span="2" />
             <DxItem data-field="task_ways.local_params" :col-span="2" />
           </DxItem>
-          <DxItem
-            :col-count="1"
-            :col-span="2"
-            item-type="group"
-            :visible="tempType == 'restful'"
-            caption="Restful任务详情"
-          >
+          <DxItem :col-count="1" :col-span="2" item-type="group" :visible="tempType == 'restful'" caption="Restful任务详情">
             <DxItem data-field="task_ways.restful_apiurl" :col-span="2" />
             <DxItem data-field="task_ways.restful_header" :col-span="2" />
             <DxItem data-field="task_ways.description" :col-span="2" />
@@ -111,13 +68,7 @@
       <DxColumn data-field="appid" caption="应用id" :visible="false" />
       <DxColumn data-field="description" caption="描述" />
 
-      <DxColumn
-        data-field
-        caption="日志记录"
-        :allow-filtering="false"
-        cell-template="taskTemplate"
-        :width="90"
-      />
+      <DxColumn data-field caption="日志记录" :allow-filtering="false" cell-template="taskTemplate" :width="90" />
       <DxColumn data-field="task_ways.local_type" caption="类型" :visible="false">
         <DxLookup value-expr="value" display-expr="text" :data-source="local_types" />
       </DxColumn>
@@ -139,15 +90,8 @@
       </template>
     </DxDataGrid>
     <!---日志记录-->
-    <Popup
-      :width="900"
-      :height="400"
-      :show-title="true"
-      :close-on-outside-click="true"
-      v-model:visible="taskDetailVisible"
-      position="center"
-      title="执行记录"
-    >
+    <Popup :width="900" :height="400" :show-title="true" :close-on-outside-click="true"
+      v-model:visible="taskDetailVisible" position="center" title="执行记录">
       <LogDetail :paramaid="selData.jobid" type="time" />
     </Popup>
   </div>
@@ -179,7 +123,7 @@ export default {
     const task_ways = [{ value: "local", text: "本地任务" }, { value: "restful", text: "Restful任务" }]
     const local_types = [{ value: "dll", text: "dll" }, { value: "exe", text: "exe" }]
     const taskDetailVisible = ref(false);
-    var selData = reactive({ jobid: null })
+    var selData = reactive({ jobid: "" })
     const type = ref("")
     const statusId = ref(0)
     const editRowKey = ref(0);//编辑的key
@@ -193,9 +137,8 @@ export default {
     const tempType = ref("")
     const statusValue = ref("")
     const dataGrid = ref(null);// dataGrid 表格数据实例
-    const ctx = getCurrentInstance()
-    let $url = ctx.appContext.config.globalProperties.$appInfo.$http
-    ctx.$alert('11')
+    const { proxy } = getCurrentInstance()
+    let $url = proxy.$appInfo.apiUrl
     const url = `${$url}/api/timedtask`;
     const dataSource = createStore({
       key: "jobid",
@@ -223,8 +166,8 @@ export default {
             valueExpr: 'value',
             placeholder: '请选择租户',
             value: 'status',
-            onValueChanged: function(data) {
-              params.tenant = data.value;
+            onValueChanged: function (data) {
+              params.tenant = data?.value;
               // 执行刷新
               dataGrid.value.instance.refresh()
               dataGrid.value.instance.clearSelection()
@@ -258,9 +201,14 @@ export default {
       }
       )
     }
-
     onMounted(
-      window.onresize = function() {
+      // function () {
+      //   const vnode = h(LogDetail, props)
+      //   render(vnode, document.body)
+      //   console.log(vnode);
+      // }(),
+
+      window.onresize = function () {
         setTimeout(() => {
           height.value = window.innerHeight - 150
           dataGrid.value.instance.refresh()
@@ -271,6 +219,8 @@ export default {
     function onContentReady() {
       document.querySelector(".dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-command-edit").innerText = "操作"
       document.querySelector(".dx-freespace-row").style.height = 0
+      // console.log(ctx.$alert)
+      // ctx.$alert("11111111111111111111111111111111111");
     }
     // 显示日志
     function toggleTaskDetailVisble(key, value = "local") {
@@ -295,6 +245,7 @@ export default {
     }
     // 修改任务状态
     function handelStatus(type) {
+
       let fn = type === "normal" ? resumejob : stopjob
       if (!selData.jobid) {
         return notify({
@@ -355,7 +306,7 @@ export default {
       tempType.value = newVal
     })
     // 选中的data
-    const onSelectionChanged = function({ selectedRowsData }) {
+    const onSelectionChanged = function ({ selectedRowsData }) {
       selData = selectedRowsData[0];
     }
 
@@ -444,3 +395,4 @@ export default {
   color: #f70a02;
 }
 </style>>
+yarn

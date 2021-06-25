@@ -1,8 +1,8 @@
 <template>
   <div class="dx-card content">
     <div class="header">
-      <div class="title">{{title}}</div>
-      <div class="description">{{description}}</div>
+      <!-- <div class="title">{{title}}</div>
+      <div class="description">{{description}}</div> -->
 
       <form class="login-form" @submit.prevent="onSubmit">
         <dx-form :form-data="formData" :disabled="loading">
@@ -71,8 +71,8 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const formData = reactive({
-      email: "11@qq.com",
-      password: "11",
+      email: "admin@jitscm.com",
+      password: "ji23sdddddASS",
       rememberMe: true
     });
     const loading = ref(false);

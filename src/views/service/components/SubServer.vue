@@ -1,7 +1,7 @@
 <!--数据服务主项以及子项目-->
 <template>
   <div>
-    <DxDataGrid :data-source="dataSource" :height="height" width="100%" key-expr="drid" ref="dataGrid"
+    <DxDataGrid :data-source="dataSource" :height="600" width="100%" key-expr="drid" ref="dataGrid"
       @toolbar-preparing="onToolbarPreparing($event)" :show-column-lines="true" :show-row-lines="true"
       :show-borders="true" :row-alternation-enabled="true" :focused-row-enabled="false" :column-auto-width="true"
       :column-hiding-enabled="false" :column-fixing="{ enabled: true }" :repaint-changes-only="true"
@@ -81,7 +81,7 @@ export default {
     })
     const dataSource = ref(null)
     const internalInstance = getCurrentInstance()
-    let $url = internalInstance.appContext.config.globalProperties.$appInfo.$http
+    let $url = internalInstance.appContext.config.globalProperties.$appInfo.apiUrl
     const url = `${$url}/api/sublistservice`;
     watch(() => props.dsid, (newVal, oldVal) => {
       params.dsCode = newVal || oldVal

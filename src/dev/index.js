@@ -1,9 +1,8 @@
-import ElMessageBox from './message-box';
-export { default as ElMessageBox } from './message-box';
+import MessageBox from './message-box';
+export { default as MessageBox } from './message-box';
+
 const version = '1.0.0';
-
 const version$1 = version;
-
 const defaultInstallOpt = {
   size: '',
   zIndex: 2000,
@@ -12,7 +11,7 @@ const components = [
 
 ];
 const plugins = [
-  ElMessageBox
+  MessageBox
 ];
 const install = (app, opt) => {
   const option = Object.assign(defaultInstallOpt, opt);
@@ -21,6 +20,7 @@ const install = (app, opt) => {
   components.forEach(component => {
     app.component(component.name, component);
   });
+
   plugins.forEach(plugin => {
     app.use(plugin);
   });
