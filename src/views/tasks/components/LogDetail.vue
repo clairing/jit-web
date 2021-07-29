@@ -15,7 +15,7 @@
       <DxColumn data-field="result" caption="结果" :visible="type == 'dispatch'"></DxColumn>
     </DxDataGrid>
   </div>
-</template>s
+</template>
 
 <script>
 import {

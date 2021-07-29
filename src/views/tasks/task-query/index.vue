@@ -8,8 +8,6 @@
         showScrollbar: 'always',
         useNative: false
       }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }" @selection-changed="onSelectionChanged">
-      @selection-changed="onSelectionChanged">
-      <DxPaging :page-size="10" />
       <DxEditing mode="popup" :allow-adding="false" :allow-deleting="true" :allow-updating="true">
         <DxPopup :show-title="true" :width="800" :height="625" :title="'调度任务信息'" />
         <DxForm>

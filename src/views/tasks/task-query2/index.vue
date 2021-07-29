@@ -97,19 +97,19 @@
       <!-- 查看结果 -->
       <!-- 当需要下载的时候，才可以查看 -->
       <template #downloadResultTemplate="{ data }">
-        <div class="task-a text-center" @click="toggleDownloadResult(data.data.download_path)"
+        <div class="text-center task-a" @click="toggleDownloadResult(data.data.download_path)"
           v-if="data.data.need_download">查看</div>
       </template>
       <!-- 查询日志 -->
       <template #logTemplate="{ data }">
-        <div class="task-a text-center" @click="toggleTaskDetailVisble(data.key,data.value)">查看</div>
+        <div class="text-center task-a" @click="toggleTaskDetailVisble(data.key,data.value)">查看</div>
       </template>
       <template #descTemplate="{data}">
         <div>{{descZH(data.data.job_desc)}}</div>
       </template>
       <!-- 状态结果 -->
       <!-- <template #statusTemplate="{ data }">
-        <div class="task-a text-center" :id="'tmp' + data.key" @click="handelStatus(data.key, data.value)">
+        <div class="text-center task-a" :id="'tmp' + data.key" @click="handelStatus(data.key, data.value)">
           {{ data.text }}</div>
       </template> -->
       <!-- 头部标题模板 -->
@@ -465,5 +465,4 @@ export default {
 .text-center {
   min-width: 80px;
 }
-</style
->>
+</style>

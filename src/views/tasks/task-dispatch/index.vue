@@ -9,7 +9,6 @@
         showScrollbar: 'always',
         useNative: false
       }" :column-resizing-mode="'widget'" :selection="{ mode: 'single' }" @selection-changed="onSelectionChanged">
-      <DxPaging :page-size="10" />
       <DxEditing mode="popup" :allow-adding="!seeDone" :allow-deleting="!seeDone" :allow-updating="true">
         <DxPopup :show-title="true" :width="800" :height="625" :title="'调度任务信息'" />
         <DxForm>
@@ -76,7 +75,7 @@
         </DxForm>
       </DxEditing>
 
-      <DxPaging :page-size="10" />
+      <DxPaging :page-size="2" />
       <DxPager :show-page-size-selector="true" :show-info="true" :allowed-page-sizes="pageSizes" />
       <!-- <DxColumn data-field="job_name" caption="任务类型" :allow-filtering='false' /> -->
       <DxColumn data-field="tenant" caption="租户" :visible="true" />
@@ -224,6 +223,10 @@ export default {
           deleteUrl: `${url}/delete`,
           onBeforeSend: (method, ajaxOptions) => {
             ajaxOptions.xhrFields = { withCredentials: false }
+          }
+          , onLoading: (res) => {
+            console.log(res)
+            return ""
           }
         })
       } else {
@@ -461,7 +464,7 @@ export default {
         if ("job_desc|".indexOf(fieldName) > -1) {
           // e.editorOptions.disabled = true
           e.editorElement.onClick = function () {
-            alert(1)
+            // alert(1)
           }
           // e.addEventListener("focus",function())
           console.log(e);
